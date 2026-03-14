@@ -716,7 +716,7 @@
       </div>
     </div>
 
-    <h3>Fase 1 — Indexação (Offline)</h3>
+    <h3>Fase 1 — Ingestion Pipeline (Indexação Offline)</h3>
 
     <div class="pipeline">
       <div class="pipeline-step">
@@ -793,14 +793,14 @@
       </div>
     </div>
 
-    <h3>Fase 2 — Recuperação (Online)</h3>
+    <h3>Fase 2 — Retriever (Recuperação Online)</h3>
     <p>Na consulta, a query do usuário é embedded com o <em>mesmo modelo</em> usado na indexação. O sistema calcula similaridade (coseno, produto interno) entre o vetor da query e todos os chunks, retornando os <code>k</code> mais relevantes.</p>
 
     <div class="formula">
       similarity(q, d) = cos(θ) = (q · d) / (||q|| × ||d||)
     </div>
 
-    <h3>Fase 3 — Geração (Online)</h3>
+    <h3>Fase 3 — Generator (Geração Online)</h3>
     <p>Os chunks recuperados são inseridos no prompt como contexto. O LLM usa essas evidências para formular a resposta — citando fontes reais em vez de fabricá-las.</p>
 
 <pre data-lang="python"><code><span class="cm"># Exemplo mínimo funcional com LangChain</span>
