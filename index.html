@@ -694,6 +694,54 @@
 
     <div class="pipeline">
       <div class="pipeline-step">
+        <div class="pipeline-step-num">1.0</div>
+        <div class="pipeline-step-body">
+          <h4>Document Source</h4>
+          <p>O ponto de entrada do pipeline RAG. Os documentos que alimentam a base de conhecimento podem vir de origens muito diversas — o sistema é agnóstico à fonte, desde que o conteúdo seja convertido para texto antes do chunking.</p>
+          <div class="card-grid" style="margin-top: 12px;">
+            <div class="card">
+              <span class="card-icon">📄</span>
+              <h5>PDFs</h5>
+              <p>Relatórios, contratos, manuais, artigos científicos. Extração via PyMuPDF, pdfplumber ou LlamaParse.</p>
+            </div>
+            <div class="card">
+              <span class="card-icon">🗄️</span>
+              <h5>Bases SQL</h5>
+              <p>Tabelas e registros de bancos relacionais (PostgreSQL, MySQL, SQLite). Convertidos via queries e serializados como texto estruturado.</p>
+            </div>
+            <div class="card">
+              <span class="card-icon">📝</span>
+              <h5>Notion</h5>
+              <p>Páginas, bases de dados e documentação interna. Integração via Notion API ou conectores LangChain/LlamaIndex nativos.</p>
+            </div>
+            <div class="card">
+              <span class="card-icon">🏢</span>
+              <h5>Confluence</h5>
+              <p>Wikis corporativos, runbooks e documentação técnica de times. Sincronização via Atlassian API.</p>
+            </div>
+            <div class="card">
+              <span class="card-icon">📰</span>
+              <h5>Artigos e Páginas Web</h5>
+              <p>Conteúdo público de sites, blogs e portais. Extração via scrapers (BeautifulSoup, Playwright) ou conectores de web crawling.</p>
+            </div>
+            <div class="card">
+              <span class="card-icon">🔌</span>
+              <h5>APIs</h5>
+              <p>Dados dinâmicos de serviços externos (REST, GraphQL). Respostas JSON serializadas e ingeridas sob demanda ou em batch.</p>
+            </div>
+            <div class="card">
+              <span class="card-icon">🏦</span>
+              <h5>Bancos Corporativos</h5>
+              <p>ERPs, CRMs, data warehouses (Salesforce, SAP, Snowflake). Conectores especializados transformam registros em documentos indexáveis.</p>
+            </div>
+          </div>
+          <div class="callout info" style="margin-top: 16px;">
+            <div class="callout-title">💡 Princípio de Ingestão</div>
+            <p>Independente da fonte, o objetivo é sempre o mesmo: <strong>texto limpo, bem estruturado e com metadados preservados</strong> (origem, data, autor, seção). Metadados ricos permitem filtros precisos no momento da recuperação.</p>
+          </div>
+        </div>
+      </div>
+      <div class="pipeline-step">
         <div class="pipeline-step-num">1.1</div>
         <div class="pipeline-step-body">
           <h4>Chunking (Fragmentação)</h4>
