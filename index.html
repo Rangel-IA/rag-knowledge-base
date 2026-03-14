@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAG — Base de Conhecimento Completa</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #181b23;
+    --border: #232733;
+    --accent: #4af0b0;
+    --accent2: #7c6af5;
+    --accent3: #f5a623;
+    --accent4: #f05e6a;
+    --text: #e8eaf0;
+    --muted: #6b7080;
+    --code-bg: #0d1117;
+    --tag-bg: rgba(74,240,176,0.10);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lora', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.75;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  nav {
+    width: 280px;
+    min-width: 280px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+    padding: 0 0 40px;
+  }
+  nav::-webkit-scrollbar { width: 4px; }
+  nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .nav-brand {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+  .nav-brand .label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .nav-brand h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .nav-section-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 16px 24px 6px;
+  }
+
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: all .15s ease;
+    border-left: 2px solid transparent;
+  }
+  nav a:hover, nav a.active {
+    color: var(--text);
+    background: rgba(255,255,255,.03);
+    border-left-color: var(--accent);
+  }
+  nav a .nav-num {
+    font-size: 10px;
+    color: var(--accent);
+    min-width: 20px;
+    font-weight: 500;
+  }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    margin-left: 280px;
+    flex: 1;
+    min-width: 0;
+    width: calc(100% - 280px);
+    padding: 0 clamp(28px, 6vw, 100px) 100px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 80px 0 60px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: 'RAG';
+    position: absolute;
+    right: -20px;
+    top: 20px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 180px;
+    font-weight: 800;
+    color: rgba(74,240,176,.03);
+    pointer-events: none;
+    line-height: 1;
+  }
+  .hero .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero h2 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .hero p {
+    font-size: 17px;
+    color: #9da3b4;
+    max-width: 600px;
+    line-height: 1.8;
+  }
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 28px;
+  }
+  .tag {
+    background: var(--tag-bg);
+    border: 1px solid rgba(74,240,176,.2);
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 100px;
+  }
+  .tag.purple { background: rgba(124,106,245,.1); border-color: rgba(124,106,245,.25); color: var(--accent2); }
+  .tag.orange { background: rgba(245,166,35,.1); border-color: rgba(245,166,35,.25); color: var(--accent3); }
+  .tag.red { background: rgba(240,94,106,.1); border-color: rgba(240,94,106,.25); color: var(--accent4); }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 60px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-child { border-bottom: none; }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+  .section-num {
+    font-family: 'Outfit', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    background: var(--tag-bg);
+    border: 1px solid rgba(74,240,176,.2);
+    padding: 6px 10px;
+    border-radius: 6px;
+    min-width: 44px;
+    text-align: center;
+    margin-top: 6px;
+  }
+  .section-num.purple { background: rgba(124,106,245,.1); border-color: rgba(124,106,245,.25); color: var(--accent2); }
+  .section-num.orange { background: rgba(245,166,35,.1); border-color: rgba(245,166,35,.25); color: var(--accent3); }
+  .section-num.red { background: rgba(240,94,106,.1); border-color: rgba(240,94,106,.25); color: var(--accent4); }
+
+  .section-header-text h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .section-header-text .subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 36px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h3::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 18px;
+    background: var(--accent);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  h4 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 24px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  p { margin-bottom: 16px; color: #c4c9d8; }
+  p strong { color: var(--text); font-weight: 600; }
+  p em { color: var(--accent3); font-style: italic; }
+
+  ul, ol {
+    margin: 12px 0 20px 0;
+    padding-left: 0;
+    list-style: none;
+  }
+  li {
+    color: #c4c9d8;
+    padding: 5px 0 5px 24px;
+    position: relative;
+    font-size: 15px;
+  }
+  li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 12px;
+    top: 7px;
+  }
+  ol { counter-reset: list-counter; }
+  ol li::before {
+    counter-increment: list-counter;
+    content: counter(list-counter) '.';
+    color: var(--accent2);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    top: 6px;
+  }
+
+  /* ── CODE ── */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    overflow-x: auto;
+    margin: 20px 0;
+    position: relative;
+  }
+  pre::before {
+    content: attr(data-lang);
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  code {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #a8d8a0;
+  }
+  p code, li code {
+    background: rgba(74,240,176,.08);
+    border: 1px solid rgba(74,240,176,.15);
+    color: var(--accent);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+
+  .kw { color: #7c6af5; }
+  .fn { color: #4af0b0; }
+  .str { color: #f5a623; }
+  .cm { color: #4a5060; font-style: italic; }
+  .num { color: #f05e6a; }
+  .cls { color: #c4a2fc; }
+
+  /* ── CALLOUTS ── */
+  .callout {
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 24px 0;
+    border-left: 3px solid;
+    background: var(--surface);
+  }
+  .callout.info { border-color: var(--accent2); background: rgba(124,106,245,.06); }
+  .callout.tip { border-color: var(--accent); background: rgba(74,240,176,.05); }
+  .callout.warning { border-color: var(--accent3); background: rgba(245,166,35,.05); }
+  .callout.danger { border-color: var(--accent4); background: rgba(240,94,106,.05); }
+  .callout-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .callout.info .callout-title { color: var(--accent2); }
+  .callout.tip .callout-title { color: var(--accent); }
+  .callout.warning .callout-title { color: var(--accent3); }
+  .callout.danger .callout-title { color: var(--accent4); }
+  .callout p { margin: 0; font-size: 14px; }
+
+  /* ── DIAGRAM BOXES ── */
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 24px;
+    margin: 24px 0;
+    overflow-x: auto;
+  }
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+  .flow-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: var(--text);
+    white-space: nowrap;
+    text-align: center;
+  }
+  .flow-box.accent { border-color: rgba(74,240,176,.4); color: var(--accent); }
+  .flow-box.purple { border-color: rgba(124,106,245,.4); color: var(--accent2); }
+  .flow-box.orange { border-color: rgba(245,166,35,.4); color: var(--accent3); }
+  .flow-box.red { border-color: rgba(240,94,106,.4); color: var(--accent4); }
+  .flow-arrow { color: var(--muted); font-size: 16px; }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 13.5px;
+  }
+  .compare-table th {
+    background: var(--surface2);
+    font-family: 'Outfit', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .compare-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    color: #c4c9d8;
+    vertical-align: top;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: rgba(255,255,255,.02); }
+  .yes { color: var(--accent); font-weight: 600; }
+  .no { color: var(--muted); }
+  .partial { color: var(--accent3); }
+
+  /* ── USE CASE CARDS ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color .2s;
+  }
+  .card:hover { border-color: rgba(74,240,176,.3); }
+  .card-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .card h5 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .card p { font-size: 13px; margin: 0; color: var(--muted); line-height: 1.6; }
+
+  /* ── TIMELINE / PIPELINE ── */
+  .pipeline {
+    margin: 24px 0;
+  }
+  .pipeline-step {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    border-left: 2px solid var(--border);
+    padding-left: 24px;
+    position: relative;
+    margin-left: 10px;
+  }
+  .pipeline-step::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 22px;
+    width: 12px;
+    height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+  }
+  .pipeline-step:last-child { border-left-color: transparent; }
+  .pipeline-step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    min-width: 30px;
+    padding-top: 2px;
+  }
+  .pipeline-step-body h4 { margin: 0 0 4px; font-size: 14px; letter-spacing: 0; color: var(--text); text-transform: none; }
+  .pipeline-step-body p { font-size: 13.5px; margin: 0; color: var(--muted); }
+
+  /* ── FORMULA BOX ── */
+  .formula {
+    background: var(--code-bg);
+    border: 1px solid rgba(124,106,245,.3);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--accent2);
+    letter-spacing: 0.5px;
+  }
+
+  /* ── QUOTE ── */
+  blockquote {
+    border-left: 3px solid var(--accent3);
+    padding: 16px 24px;
+    margin: 24px 0;
+    background: rgba(245,166,35,.04);
+    border-radius: 0 10px 10px 0;
+    font-style: italic;
+    color: #a0a6b8;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 8px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent3);
+  }
+
+  /* ── PROGRESS / MATURITY BAR ── */
+  .metric-row { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+  .metric { display: flex; align-items: center; gap: 12px; font-family: 'DM Mono', monospace; font-size: 12px; }
+  .metric-label { min-width: 160px; color: var(--muted); }
+  .metric-bar { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .metric-fill { height: 100%; border-radius: 2px; background: var(--accent); }
+  .metric-val { min-width: 32px; text-align: right; color: var(--accent); }
+
+  @media (max-width: 1100px) {
+    main { padding: 0 clamp(20px, 4vw, 60px) 100px; }
+  }
+
+  @media (max-width: 768px) {
+    nav { display: none; }
+    main { margin-left: 0; width: 100%; padding: 0 20px 80px; }
+    .hero h2 { font-size: 30px; }
+    .hero::before { font-size: 100px; }
+    .section-header-text h2 { font-size: 24px; }
+    .card-grid { grid-template-columns: 1fr; }
+    .compare-table { font-size: 12px; }
+    .compare-table th, .compare-table td { padding: 8px 10px; }
+    pre { padding: 16px; }
+    code { font-size: 12px; }
+    .flow { flex-wrap: wrap; }
+  }
+
+  @media (max-width: 480px) {
+    .hero h2 { font-size: 26px; }
+    .tag-row { gap: 6px; }
+    .tag { font-size: 10px; padding: 3px 10px; }
+    .formula { font-size: 12px; padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ SIDEBAR ═══════════════════════════════ -->
+<nav>
+  <div class="nav-brand">
+    <span class="label">Base de Conhecimento</span>
+    <h1>RAG Completo</h1>
+  </div>
+
+  <div class="nav-section-title">Fundamentos</div>
+  <a href="#s0"><span class="nav-num">00</span> Visão Geral</a>
+  <a href="#s1"><span class="nav-num">01</span> O Problema RAG Resolve</a>
+  <a href="#s2"><span class="nav-num">02</span> Arquitetura Base</a>
+
+  <div class="nav-section-title">Variantes RAG</div>
+  <a href="#s3"><span class="nav-num">03</span> RAG Clássico</a>
+  <a href="#s4"><span class="nav-num">04</span> RAG com Memória</a>
+  <a href="#s5"><span class="nav-num">05</span> Agentic RAG</a>
+  <a href="#s6"><span class="nav-num">06</span> CRAG</a>
+  <a href="#s7"><span class="nav-num">07</span> Adaptive RAG</a>
+  <a href="#s8"><span class="nav-num">08</span> GraphRAG</a>
+  <a href="#s9"><span class="nav-num">09</span> Hybrid RAG</a>
+  <a href="#s10"><span class="nav-num">10</span> RAG-Fusion</a>
+
+  <div class="nav-section-title">Técnica Avançada</div>
+  <a href="#s11"><span class="nav-num">11</span> HyDE</a>
+
+  <div class="nav-section-title">Referência</div>
+  <a href="#s12"><span class="nav-num">12</span> Comparativo Geral</a>
+  <a href="#s13"><span class="nav-num">13</span> Quando Usar Qual</a>
+</nav>
+
+<!-- ═══════════════════════════════ MAIN ════════════════════════════════ -->
+<main>
+
+  <!-- HERO -->
+  <div class="hero" id="s0">
+    <div class="eyebrow">Engenharia de Contexto · Prompt Engineering · IA Aplicada</div>
+    <h2>Retrieval-Augmented<br><em>Generation</em></h2>
+    <p>Da teoria ao código. Um mapa completo de todas as arquiteturas RAG — fundamentos, variantes avançadas e como escolher a certa para cada problema real.</p>
+    <div class="tag-row">
+      <span class="tag">RAG Clássico</span>
+      <span class="tag">RAG c/ Memória</span>
+      <span class="tag purple">Agentic RAG</span>
+      <span class="tag purple">CRAG</span>
+      <span class="tag orange">Adaptive RAG</span>
+      <span class="tag orange">GraphRAG</span>
+      <span class="tag red">Hybrid RAG</span>
+      <span class="tag red">RAG-Fusion</span>
+      <span class="tag">HyDE</span>
+    </div>
+  </div>
+
+  <!-- ═══════════ SEÇÃO 1 ═══════════ -->
+  <section class="section" id="s1">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div class="section-header-text">
+        <h2>O Problema que o RAG Resolve</h2>
+        <div class="subtitle">Por que LLMs sozinhos não bastam</div>
+      </div>
+    </div>
+
+    <p>Grandes Modelos de Linguagem (LLMs) como GPT-4, Claude e Gemini são extraordinariamente capazes, mas sofrem de três limitações estruturais quando usados em produção sem RAG:</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon">🗓️</span>
+        <h5>Knowledge Cutoff</h5>
+        <p>O modelo só sabe o que existia até sua data de treino. Eventos recentes, documentos internos e dados proprietários são invisíveis.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🌀</span>
+        <h5>Alucinação</h5>
+        <p>Sem evidências concretas, o modelo "inventa" fatos plausíveis. Em negócios críticos (jurídico, médico, financeiro), isso é inaceitável.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">📏</span>
+        <h5>Janela de Contexto</h5>
+        <p>Mesmo com janelas grandes, inserir toda a base de conhecimento no prompt é caro, lento e muitas vezes impossível.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔒</span>
+        <h5>Dados Privados</h5>
+        <p>Documentos internos, contratos e wikis corporativas nunca estiveram no treino do modelo. Sem RAG, são inacessíveis.</p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">💡 A Solução RAG</div>
+      <p>RAG combina <strong>recuperação dinâmica de informação</strong> com <strong>geração de texto</strong>. Em vez de ter tudo "na cabeça", o modelo consulta uma base externa no momento da pergunta — como um pesquisador abrindo o livro certo na hora certa.</p>
+    </div>
+
+    <h3>A Metáfora do Especialista</h3>
+    <p>Imagine dois tipos de médico:</p>
+    <ul>
+      <li><strong>Médico sem RAG:</strong> Responde do que memorizou na faculdade. Rápido, mas limitado à data de formatura.</li>
+      <li><strong>Médico com RAG:</strong> Consulta literatura médica atualizada antes de responder. Leva um segundo a mais, mas com evidências reais.</li>
+    </ul>
+    <p>RAG é essa biblioteca consultável em tempo real, integrada ao processo de raciocínio do modelo.</p>
+  </section>
+
+  <!-- ═══════════ SEÇÃO 2 ═══════════ -->
+  <section class="section" id="s2">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div class="section-header-text">
+        <h2>Arquitetura Base do RAG</h2>
+        <div class="subtitle">Os três pilares universais</div>
+      </div>
+    </div>
+
+    <p>Independente da variante, todo sistema RAG é composto de três fases:</p>
+
+    <div class="diagram">
+      <div class="flow">
+        <div class="flow-box orange">📄 Documentos</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box">Chunking</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box">Embedding</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box accent">Vector Store</div>
+      </div>
+      <div style="margin: 16px 0 8px; border-top: 1px solid var(--border); padding-top: 16px;">
+        <div class="flow">
+          <div class="flow-box orange">❓ Query</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box">Embed Query</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box accent">Retrieve k docs</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box purple">Prompt + Contexto</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box accent">LLM → Resposta</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Fase 1 — Indexação (Offline)</h3>
+
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="pipeline-step-num">1.1</div>
+        <div class="pipeline-step-body">
+          <h4>Chunking (Fragmentação)</h4>
+          <p>Documentos grandes são quebrados em pedaços menores. A estratégia importa: chunk fixo (512 tokens), por sentença, por parágrafo, ou hierárquico. Chunks muito pequenos perdem contexto; muito grandes prejudicam a precisão da busca.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num">1.2</div>
+        <div class="pipeline-step-body">
+          <h4>Embedding</h4>
+          <p>Cada chunk é convertido em um vetor numérico de alta dimensão (ex: 1536 dimensões no text-embedding-3-small da OpenAI) por um modelo de embedding. Textos semanticamente similares ficam próximos nesse espaço vetorial.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num">1.3</div>
+        <div class="pipeline-step-body">
+          <h4>Vector Store</h4>
+          <p>Os vetores são armazenados em bancos especializados (Pinecone, Weaviate, Chroma, pgvector, Qdrant). Permitem busca por similaridade com complexidade O(log n) via HNSW ou FAISS.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Fase 2 — Recuperação (Online)</h3>
+    <p>Na consulta, a query do usuário é embedded com o <em>mesmo modelo</em> usado na indexação. O sistema calcula similaridade (coseno, produto interno) entre o vetor da query e todos os chunks, retornando os <code>k</code> mais relevantes.</p>
+
+    <div class="formula">
+      similarity(q, d) = cos(θ) = (q · d) / (||q|| × ||d||)
+    </div>
+
+    <h3>Fase 3 — Geração (Online)</h3>
+    <p>Os chunks recuperados são inseridos no prompt como contexto. O LLM usa essas evidências para formular a resposta — citando fontes reais em vez de fabricá-las.</p>
+
+<pre data-lang="python"><code><span class="cm"># Exemplo mínimo funcional com LangChain</span>
+<span class="kw">from</span> langchain_openai <span class="kw">import</span> <span class="cls">OpenAIEmbeddings</span>, <span class="cls">ChatOpenAI</span>
+<span class="kw">from</span> langchain_community.vectorstores <span class="kw">import</span> <span class="cls">Chroma</span>
+<span class="kw">from</span> langchain.chains <span class="kw">import</span> <span class="cls">RetrievalQA</span>
+
+<span class="cm"># 1. Indexação</span>
+embeddings = <span class="cls">OpenAIEmbeddings</span>(model=<span class="str">"text-embedding-3-small"</span>)
+vectorstore = <span class="cls">Chroma</span>.from_documents(docs, embeddings)
+
+<span class="cm"># 2. Retriever com top-k=4</span>
+retriever = vectorstore.as_retriever(
+    search_type=<span class="str">"similarity"</span>,
+    search_kwargs={<span class="str">"k"</span>: <span class="num">4</span>}
+)
+
+<span class="cm"># 3. Chain completa</span>
+llm = <span class="cls">ChatOpenAI</span>(model=<span class="str">"gpt-4o"</span>, temperature=<span class="num">0</span>)
+qa_chain = <span class="cls">RetrievalQA</span>.from_chain_type(
+    llm=llm,
+    retriever=retriever,
+    return_source_documents=<span class="kw">True</span>
+)
+
+result = qa_chain.invoke({<span class="str">"query"</span>: <span class="str">"Qual é a política de reembolso?"</span>})
+<span class="fn">print</span>(result[<span class="str">"result"</span>])
+</code></pre>
+
+    <h3>Métricas de Qualidade RAG</h3>
+    <div class="metric-row">
+      <div class="metric">
+        <span class="metric-label">Faithfulness</span>
+        <div class="metric-bar"><div class="metric-fill" style="width:90%"></div></div>
+        <span class="metric-val">Alta</span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Answer Relevancy</span>
+        <div class="metric-bar"><div class="metric-fill" style="width:85%"></div></div>
+        <span class="metric-val">Alta</span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Context Precision</span>
+        <div class="metric-bar"><div class="metric-fill" style="width:75%"></div></div>
+        <span class="metric-val">Média</span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Context Recall</span>
+        <div class="metric-bar"><div class="metric-fill" style="width:70%"></div></div>
+        <span class="metric-val">Média</span>
+      </div>
+    </div>
+    <p style="font-size:13px; color:var(--muted)">Frameworks como <strong>RAGAS</strong> e <strong>TruLens</strong> automatizam essas métricas para avaliação contínua.</p>
+  </section>
+
+  <!-- ═══════════ SEÇÃO 3 ═══════════ -->
+  <section class="section" id="s3">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div class="section-header-text">
+        <h2>RAG Clássico</h2>
+        <div class="subtitle">Retrieve → Augment → Generate (sem iteração)</div>
+      </div>
+    </div>
+
+    <p>O RAG Clássico (também chamado <em>Naive RAG</em> ou <em>Vanilla RAG</em>) é o padrão original introduzido pelo paper da Meta em 2020. Ele define o pipeline linear fundamental: uma query entra, chunks são recuperados, e o LLM gera a resposta em uma única passagem.</p>
+
+    <blockquote>
+      "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks" (Lewis et al., 2020) — o paper que estabeleceu o paradigma RAG.
+      <cite>— Meta AI Research, NeurIPS 2020</cite>
+    </blockquote>
+
+    <h3>Como Funciona</h3>
+    <div class="diagram">
+      <div class="flow">
+        <div class="flow-box orange">Query do usuário</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box">Embed</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box accent">Top-K Chunks</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box purple">Prompt Augmentado</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box accent">Resposta Final</div>
+      </div>
+    </div>
+
+    <h3>Implementação Detalhada</h3>
+
+<pre data-lang="python"><code><span class="kw">from</span> langchain_core.prompts <span class="kw">import</span> <span class="cls">ChatPromptTemplate</span>
+<span class="kw">from</span> langchain_core.runnables <span class="kw">import</span> <span class="cls">RunnablePassthrough</span>
+<span class="kw">from</span> langchain_core.output_parsers <span class="kw">import</span> <span class="cls">StrOutputParser</span>
+
+<span class="cm"># Template do prompt aumentado</span>
+template = <span class="str">"""Você é um assistente preciso. Responda SOMENTE com base
+no contexto abaixo. Se não souber, diga que não encontrou.
+
+CONTEXTO:
+{context}
+
+PERGUNTA: {question}
+
+RESPOSTA:"""</span>
+
+prompt = <span class="cls">ChatPromptTemplate</span>.from_template(template)
+
+<span class="cm"># Formatar docs recuperados</span>
+<span class="kw">def</span> <span class="fn">format_docs</span>(docs):
+    <span class="kw">return</span> <span class="str">"\n\n"</span>.join(
+        <span class="fn">f</span><span class="str">"[Fonte: {d.metadata.get('source','?')}]\n{d.page_content}"</span>
+        <span class="kw">for</span> d <span class="kw">in</span> docs
+    )
+
+<span class="cm"># LCEL chain: RAG clássico</span>
+rag_chain = (
+    {
+        <span class="str">"context"</span>: retriever | format_docs,
+        <span class="str">"question"</span>: <span class="cls">RunnablePassthrough</span>()
+    }
+    | prompt
+    | llm
+    | <span class="cls">StrOutputParser</span>()
+)
+
+answer = rag_chain.invoke(<span class="str">"O que cobre o plano básico?"</span>)
+</code></pre>
+
+    <h3>Pontos Fortes e Limitações</h3>
+    <table class="compare-table">
+      <tr><th>Aspecto</th><th>Avaliação</th><th>Comentário</th></tr>
+      <tr><td>Simplicidade</td><td class="yes">✓ Alta</td><td>Fácil de implementar e debugar</td></tr>
+      <tr><td>Latência</td><td class="yes">✓ Baixa</td><td>Uma chamada LLM, uma busca vetorial</td></tr>
+      <tr><td>Custo</td><td class="yes">✓ Baixo</td><td>Mínimo de tokens e chamadas API</td></tr>
+      <tr><td>Multi-hop reasoning</td><td class="no">✗ Fraco</td><td>Não faz perguntas encadeadas</td></tr>
+      <tr><td>Recuperação imprecisa</td><td class="no">✗ Problema</td><td>Chunks ruins não são corrigidos</td></tr>
+      <tr><td>Queries ambíguas</td><td class="partial">~ Médio</td><td>Depende da qualidade do embedding</td></tr>
+    </table>
+
+    <h3>Casos de Uso Ideais</h3>
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon">📞</span>
+        <h5>FAQ e Suporte</h5>
+        <p>Chatbot de atendimento que responde perguntas frequentes com base em documentação estática e bem estruturada.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">📖</span>
+        <h5>Documentação Técnica</h5>
+        <p>Assistente para devs consultarem docs de APIs, SDKs ou guias de uso sem precisar navegar manualmente.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEÇÃO 4 ═══════════ -->
+  <section class="section" id="s4">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div class="section-header-text">
+        <h2>RAG com Memória</h2>
+        <div class="subtitle">Conversação com contexto persistente</div>
+      </div>
+    </div>
+
+    <p>O RAG Clássico é <strong>stateless</strong>: cada query é tratada de forma independente. O RAG com Memória adiciona a dimensão temporal — o sistema lembra da conversa, do usuário e de interações passadas.</p>
+
+    <h3>Tipos de Memória</h3>
+
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="pipeline-step-num">M1</div>
+        <div class="pipeline-step-body">
+          <h4>Memória de Curto Prazo (Conversação)</h4>
+          <p>Histórico da sessão atual. Implementado via <code>ConversationBufferMemory</code> ou <code>MessageHistory</code>. Essencial para perguntas como "E quanto à segunda cláusula que você mencionou?"</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num">M2</div>
+        <div class="pipeline-step-body">
+          <h4>Memória de Longo Prazo (Episódica)</h4>
+          <p>Resumos de conversas passadas armazenados como chunks no próprio vector store. O sistema recupera contexto relevante de interações anteriores.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num">M3</div>
+        <div class="pipeline-step-body">
+          <h4>Memória Semântica (Entidades)</h4>
+          <p>Fatos sobre o usuário e entidades mencionadas. Ex: "João é CFO da Empresa X e quer relatórios mensais." Gerenciado por frameworks como <code>mem0</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>O Problema da Query Ambígua em Conversas</h3>
+    <p>Em multi-turn, a query atual pode ser ambígua sem o histórico:</p>
+    <div class="callout warning">
+      <div class="callout-title">⚠️ Problema</div>
+      <p>Turno 1: "Fale sobre os contratos de 2023." | Turno 2: "E os do ano seguinte?" — O retriever ingênuo busca "E os do ano seguinte?" e falha. É preciso <strong>reescrever a query</strong> usando o histórico.</p>
+    </div>
+
+<pre data-lang="python"><code><span class="kw">from</span> langchain_core.prompts <span class="kw">import</span> <span class="cls">MessagesPlaceholder</span>
+<span class="kw">from</span> langchain.chains <span class="kw">import</span> create_history_aware_retriever
+<span class="kw">from</span> langchain.chains <span class="kw">import</span> create_retrieval_chain
+
+<span class="cm"># Prompt para reformular a query com base no histórico</span>
+contextualize_prompt = <span class="cls">ChatPromptTemplate</span>.from_messages([
+    (<span class="str">"system"</span>, <span class="str">"""Dado o histórico de conversa e a pergunta atual,
+reformule a pergunta para ser standalone (sem precisar do histórico).
+Retorne a pergunta reformulada ou a original se já for clara."""</span>),
+    <span class="cls">MessagesPlaceholder</span>(<span class="str">"chat_history"</span>),
+    (<span class="str">"human"</span>, <span class="str">"{input}"</span>),
+])
+
+<span class="cm"># Retriever ciente do histórico</span>
+history_aware_retriever = create_history_aware_retriever(
+    llm, retriever, contextualize_prompt
+)
+
+<span class="cm"># Chain completa com memória</span>
+rag_chain = create_retrieval_chain(
+    history_aware_retriever,
+    question_answer_chain  <span class="cm"># chain padrão de QA</span>
+)
+
+<span class="cm"># Uso com histórico</span>
+response = rag_chain.invoke({
+    <span class="str">"input"</span>: <span class="str">"E os contratos do ano seguinte?"</span>,
+    <span class="str">"chat_history"</span>: chat_history  <span class="cm"># lista de mensagens anteriores</span>
+})
+</code></pre>
+
+    <h3>Padrão Avançado: Mem0 para Memória Persistente</h3>
+<pre data-lang="python"><code><span class="kw">import</span> mem0
+
+<span class="cm"># Inicializar cliente de memória</span>
+memory = mem0.<span class="cls">Memory</span>()
+
+<span class="cm"># Salvar contexto do usuário após cada conversa</span>
+memory.add(
+    messages=[{<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Sou CFO e preciso de relatórios de custos"</span>}],
+    user_id=<span class="str">"joao_silva"</span>
+)
+
+<span class="cm"># Recuperar memórias relevantes no próximo acesso</span>
+memories = memory.search(
+    query=<span class="str">"que tipo de relatórios precisa"</span>,
+    user_id=<span class="str">"joao_silva"</span>
+)
+
+<span class="cm"># Injetar no contexto do RAG</span>
+user_context = <span class="str">"\n"</span>.join([m[<span class="str">"memory"</span>] <span class="kw">for</span> m <span class="kw">in</span> memories])
+</code></pre>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon">🏦</span>
+        <h5>Assessor Financeiro Digital</h5>
+        <p>Lembra do portfólio, perfil de risco e objetivos do cliente ao longo de meses de conversa.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🏥</span>
+        <h5>Assistente Médico</h5>
+        <p>Mantém histórico de sintomas, medicações e exames do paciente entre consultas distintas.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEÇÃO 5 ═══════════ -->
+  <section class="section" id="s5">
+    <div class="section-header">
+      <div class="section-num purple">05</div>
+      <div class="section-header-text">
+        <h2>Agentic RAG</h2>
+        <div class="subtitle">O LLM decide quando e como buscar</div>
+      </div>
+    </div>
+
+    <p>No RAG Clássico, o retriever é chamado sempre, de forma cega. No <strong>Agentic RAG</strong>, o LLM atua como um <em>agente</em> que raciocina, planeja e decide dinamicamente quais ferramentas usar, quantas vezes recuperar e quando parar.</p>
+
+    <blockquote>
+      "O agente não é uma ferramenta que você chama. É um tomador de decisões que usa ferramentas."
+      <cite>— Andrew Ng, Sequoia AI Ascent, 2024</cite>
+    </blockquote>
+
+    <h3>Arquitetura ReAct (Reason + Act)</h3>
+    <div class="diagram">
+      <div class="flow" style="flex-direction: column; align-items: flex-start; gap: 4px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div class="flow-box orange" style="min-width:120px">Pergunta</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box purple" style="min-width:200px">🧠 Thought: Preciso buscar X</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-left:36px;">
+          <span class="flow-arrow">↓</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div class="flow-box accent" style="min-width:120px">Action: Search</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box" style="min-width:200px">Observation: [resultados]</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-left:36px;">
+          <span class="flow-arrow">↓</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div class="flow-box purple" style="min-width:120px">🧠 Thought: Tenho o suficiente?</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box accent" style="min-width:200px">Final Answer</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Ferramentas Disponíveis para o Agente</h3>
+    <ul>
+      <li><strong>retriever_tool</strong> — Busca semântica na base vetorial</li>
+      <li><strong>web_search_tool</strong> — Acesso a informações em tempo real</li>
+      <li><strong>calculator_tool</strong> — Cálculos matemáticos precisos</li>
+      <li><strong>sql_tool</strong> — Consultas a banco de dados estruturado</li>
+      <li><strong>code_interpreter_tool</strong> — Execução de código Python</li>
+      <li><strong>memory_tool</strong> — Acesso a memória episódica do usuário</li>
+    </ul>
+
+<pre data-lang="python"><code><span class="kw">from</span> langchain.agents <span class="kw">import</span> create_react_agent, <span class="cls">AgentExecutor</span>
+<span class="kw">from</span> langchain.tools.retriever <span class="kw">import</span> create_retriever_tool
+<span class="kw">from</span> langchain_community.tools <span class="kw">import</span> <span class="cls">DuckDuckGoSearchRun</span>
+
+<span class="cm"># Ferramenta de retrieval com descrição semântica</span>
+rag_tool = create_retriever_tool(
+    retriever,
+    name=<span class="str">"busca_documentos_internos"</span>,
+    description=<span class="str">"""Use para buscar informações sobre políticas, contratos,
+    procedimentos internos e documentação da empresa. Prefira esta fonte
+    para perguntas sobre dados proprietários."""</span>
+)
+
+<span class="cm"># Ferramenta de busca web</span>
+web_tool = <span class="cls">DuckDuckGoSearchRun</span>(
+    description=<span class="str">"Use para informações externas, notícias recentes e dados públicos"</span>
+)
+
+tools = [rag_tool, web_tool]
+
+<span class="cm"># Agente ReAct</span>
+agent = create_react_agent(llm, tools, react_prompt)
+executor = <span class="cls">AgentExecutor</span>(
+    agent=agent,
+    tools=tools,
+    verbose=<span class="kw">True</span>,
+    max_iterations=<span class="num">6</span>,
+    handle_parsing_errors=<span class="kw">True</span>
+)
+
+result = executor.invoke({
+    <span class="str">"input"</span>: <span class="str">"Compare nossa política de férias com as práticas do mercado em 2024"</span>
+})
+<span class="cm"># → Agente busca docs internos E web, combina os resultados</span>
+</code></pre>
+
+    <h3>Variante: Multi-Agent RAG</h3>
+    <p>Para problemas complexos, múltiplos agentes especializados colaboram:</p>
+
+    <div class="diagram">
+      <div class="flow">
+        <div class="flow-box orange">Orquestrador</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box accent">Agente Retrieval</div>
+      </div>
+      <div class="flow" style="margin-top:8px">
+        <div style="min-width:120px"></div>
+        <span class="flow-arrow" style="visibility:hidden">→</span>
+        <div class="flow-box purple">Agente Síntese</div>
+      </div>
+      <div class="flow" style="margin-top:8px">
+        <div style="min-width:120px"></div>
+        <span class="flow-arrow" style="visibility:hidden">→</span>
+        <div class="flow-box red">Agente Verificação</div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-title">💡 LangGraph para Agentic RAG</div>
+      <p>O framework <strong>LangGraph</strong> permite modelar fluxos agênticos como grafos de estado com ciclos, condicionais e memória persistente — ideal para Agentic RAG em produção.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEÇÃO 6 ═══════════ -->
+  <section class="section" id="s6">
+    <div class="section-header">
+      <div class="section-num purple">06</div>
+      <div class="section-header-text">
+        <h2>CRAG — Corrective RAG</h2>
+        <div class="subtitle">Auto-avaliação e correção dinâmica do contexto</div>
+      </div>
+    </div>
+
+    <p>Publicado em 2024 (Yan et al.), o <strong>CRAG</strong> adiciona um <em>grader</em> (avaliador) que verifica automaticamente a qualidade dos chunks recuperados. Se forem irrelevantes, o sistema aciona estratégias de correção — incluindo busca na web.</p>
+
+    <h3>Os Três Estados do CRAG</h3>
+    <div class="diagram">
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+        <div style="text-align:center; padding:16px; background:rgba(74,240,176,.06); border:1px solid rgba(74,240,176,.2); border-radius:10px;">
+          <div style="font-size:28px; margin-bottom:8px;">✅</div>
+          <div style="font-family:'Outfit',sans-serif; font-weight:700; color:var(--accent); margin-bottom:6px;">CORRETO</div>
+          <div style="font-size:12px; color:var(--muted)">Chunks são relevantes. Usa diretamente com refinamento (knowledge strips).</div>
+        </div>
+        <div style="text-align:center; padding:16px; background:rgba(240,94,106,.06); border:1px solid rgba(240,94,106,.2); border-radius:10px;">
+          <div style="font-size:28px; margin-bottom:8px;">❌</div>
+          <div style="font-family:'Outfit',sans-serif; font-weight:700; color:var(--accent4); margin-bottom:6px;">INCORRETO</div>
+          <div style="font-size:12px; color:var(--muted)">Chunks irrelevantes. Descarta e aciona busca web complementar.</div>
+        </div>
+        <div style="text-align:center; padding:16px; background:rgba(245,166,35,.06); border:1px solid rgba(245,166,35,.2); border-radius:10px;">
+          <div style="font-size:28px; margin-bottom:8px;">🤔</div>
+          <div style="font-family:'Outfit',sans-serif; font-weight:700; color:var(--accent3); margin-bottom:6px;">AMBÍGUO</div>
+          <div style="font-size:12px; color:var(--muted)">Combina ambos: refina os parcialmente relevantes + busca web.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Pipeline CRAG com LangGraph</h3>
+
+<pre data-lang="python"><code><span class="kw">from</span> langgraph.graph <span class="kw">import</span> <span class="cls">StateGraph</span>, <span class="cls">END</span>
+<span class="kw">from</span> typing <span class="kw">import</span> <span class="cls">TypedDict</span>, <span class="cls">List</span>
+<span class="kw">from</span> langchain_core.documents <span class="kw">import</span> <span class="cls">Document</span>
+
+<span class="kw">class</span> <span class="cls">GraphState</span>(<span class="cls">TypedDict</span>):
+    question: <span class="fn">str</span>
+    documents: <span class="cls">List</span>[<span class="cls">Document</span>]
+    generation: <span class="fn">str</span>
+    web_search: <span class="fn">bool</span>
+
+<span class="cm"># Grader: avalia relevância dos docs recuperados</span>
+grader_prompt = <span class="str">"""Você é um avaliador de relevância.
+Doc: {document} | Pergunta: {question}
+Retorne JSON: {"score": "yes"} ou {"score": "no"}"""</span>
+
+<span class="kw">def</span> <span class="fn">grade_documents</span>(state):
+    docs = state[<span class="str">"documents"</span>]
+    question = state[<span class="str">"question"</span>]
+    filtered = []
+    web_needed = <span class="kw">False</span>
+
+    <span class="kw">for</span> doc <span class="kw">in</span> docs:
+        score = grader_chain.invoke({
+            <span class="str">"document"</span>: doc.page_content,
+            <span class="str">"question"</span>: question
+        })
+        <span class="kw">if</span> score[<span class="str">"score"</span>] == <span class="str">"yes"</span>:
+            filtered.append(doc)
+        <span class="kw">else</span>:
+            web_needed = <span class="kw">True</span>  <span class="cm"># marca para busca complementar</span>
+
+    <span class="kw">return</span> {<span class="str">"documents"</span>: filtered, <span class="str">"web_search"</span>: web_needed}
+
+<span class="kw">def</span> <span class="fn">decide_next</span>(state):
+    <span class="kw">if</span> state[<span class="str">"web_search"</span>]:
+        <span class="kw">return</span> <span class="str">"web_search_node"</span>
+    <span class="kw">return</span> <span class="str">"generate"</span>
+
+<span class="cm"># Construir grafo CRAG</span>
+workflow = <span class="cls">StateGraph</span>(<span class="cls">GraphState</span>)
+workflow.add_node(<span class="str">"retrieve"</span>, retrieve)
+workflow.add_node(<span class="str">"grade_documents"</span>, grade_documents)
+workflow.add_node(<span class="str">"web_search_node"</span>, web_search)
+workflow.add_node(<span class="str">"generate"</span>, generate)
+
+workflow.set_entry_point(<span class="str">"retrieve"</span>)
+workflow.add_edge(<span class="str">"retrieve"</span>, <span class="str">"grade_documents"</span>)
+workflow.add_conditional_edges(<span class="str">"grade_documents"</span>, decide_next)
+workflow.add_edge(<span class="str">"web_search_node"</span>, <span class="str">"generate"</span>)
+workflow.add_edge(<span class="str">"generate"</span>, <span class="cls">END</span>)
+
+app = workflow.compile()
+</code></pre>
+
+    <h3>Knowledge Refinement</h3>
+    <p>Antes de usar os chunks aprovados, o CRAG aplica <em>decomposição e filtragem</em>: cada chunk é quebrado em "knowledge strips" (sentenças individuais), e só as diretamente relevantes para a query são mantidas. Isso reduz ruído e melhora a precisão da geração.</p>
+
+    <div class="callout tip">
+      <div class="callout-title">✅ Quando usar CRAG</div>
+      <p>Ideal quando sua base de documentos tem qualidade variável, cobertura incompleta, ou quando perguntas podem cair fora do escopo da base interna — exigindo fallback para fontes externas.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEÇÃO 7 ═══════════ -->
+  <section class="section" id="s7">
+    <div class="section-header">
+      <div class="section-num orange">07</div>
+      <div class="section-header-text">
+        <h2>Adaptive RAG</h2>
+        <div class="subtitle">Roteamento inteligente de estratégias</div>
+      </div>
+    </div>
+
+    <p>O <strong>Adaptive RAG</strong> (Jeong et al., 2024) classifica cada query <em>antes</em> de processá-la e escolhe a estratégia de recuperação mais adequada — sem RAG, RAG simples, ou RAG iterativo — otimizando custo e qualidade dinamicamente.</p>
+
+    <h3>O Roteador de Complexidade</h3>
+    <div class="diagram">
+      <div style="display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:start;">
+        <div class="flow-box orange" style="padding:16px; text-align:center;">
+          Query<br>de entrada
+        </div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div class="flow" style="gap:8px;">
+            <div class="flow-box" style="min-width:180px">Classificador LLM</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box accent">Simples → LLM direto</div>
+          </div>
+          <div class="flow" style="gap:8px;">
+            <div style="min-width:180px"></div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box purple">Factual → RAG único</div>
+          </div>
+          <div class="flow" style="gap:8px;">
+            <div style="min-width:180px"></div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box orange">Complexo → RAG iterativo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h4>Tipos de Query e Estratégias</h4>
+    <table class="compare-table">
+      <tr><th>Tipo de Query</th><th>Exemplo</th><th>Estratégia</th><th>Por quê</th></tr>
+      <tr>
+        <td><strong>Saudação / Chat</strong></td>
+        <td>"Olá, tudo bem?"</td>
+        <td class="yes">Sem RAG</td>
+        <td>Não precisa de contexto</td>
+      </tr>
+      <tr>
+        <td><strong>Factual Simples</strong></td>
+        <td>"Qual a cláusula 3 do contrato X?"</td>
+        <td class="partial">RAG único</td>
+        <td>Uma busca é suficiente</td>
+      </tr>
+      <tr>
+        <td><strong>Multi-hop</strong></td>
+        <td>"Compare desempenho de Q1 vs Q2 e explique as causas"</td>
+        <td class="no">RAG iterativo</td>
+        <td>Requer múltiplas buscas encadeadas</td>
+      </tr>
+    </table>
+
+<pre data-lang="python"><code><span class="cm"># Classificador de complexidade da query</span>
+router_prompt = <span class="str">"""Classifique a pergunta abaixo em uma das categorias:
+- "no_rag": saudação, conversa casual, opinião sem necessidade de dados
+- "single_rag": pergunta factual que uma busca resolve
+- "iterative_rag": pergunta complexa que requer múltiplas buscas
+
+Pergunta: {question}
+Retorne JSON: {"strategy": "..."}"""</span>
+
+<span class="kw">def</span> <span class="fn">route_question</span>(state):
+    result = router_chain.invoke({<span class="str">"question"</span>: state[<span class="str">"question"</span>]})
+    strategy = result[<span class="str">"strategy"</span>]
+
+    <span class="kw">if</span> strategy == <span class="str">"no_rag"</span>:
+        <span class="kw">return</span> <span class="str">"llm_only"</span>
+    <span class="kw">elif</span> strategy == <span class="str">"single_rag"</span>:
+        <span class="kw">return</span> <span class="str">"rag_simple"</span>
+    <span class="kw">else</span>:
+        <span class="kw">return</span> <span class="str">"rag_iterativo"</span>
+
+<span class="cm"># Nó de RAG iterativo: recupera, gera resposta parcial,</span>
+<span class="cm"># decide se precisa de mais evidências, repete até convergir</span>
+<span class="kw">def</span> <span class="fn">iterative_rag</span>(state, max_rounds=<span class="num">3</span>):
+    question = state[<span class="str">"question"</span>]
+    all_docs = []
+
+    <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(max_rounds):
+        docs = retriever.invoke(question)
+        all_docs.extend(docs)
+
+        <span class="cm"># Checar se temos informação suficiente</span>
+        sufficiency = check_sufficiency(question, all_docs)
+        <span class="kw">if</span> sufficiency[<span class="str">"sufficient"</span>]:
+            <span class="kw">break</span>
+
+        <span class="cm"># Reformular query baseado no que falta</span>
+        question = reformulate_query(question, all_docs)
+
+    <span class="kw">return</span> {<span class="str">"documents"</span>: all_docs}
+</code></pre>
+
+    <div class="callout info">
+      <div class="callout-title">📊 Ganho de Performance</div>
+      <p>O paper original do Adaptive RAG reporta ganhos de <strong>5-10%</strong> em benchmarks de QA versus RAG fixo, com redução de custo de tokens em perguntas simples — o melhor dos dois mundos.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEÇÃO 8 ═══════════ -->
+  <section class="section" id="s8">
+    <div class="section-header">
+      <div class="section-num orange">08</div>
+      <div class="section-header-text">
+        <h2>GraphRAG</h2>
+        <div class="subtitle">Conhecimento estruturado como grafo de entidades</div>
+      </div>
+    </div>
+
+    <p>Publicado pela Microsoft em 2024, o <strong>GraphRAG</strong> transforma documentos em um <em>knowledge graph</em> de entidades e relações. Em vez de buscar chunks textuais, navega por conexões semânticas — capturando relações implícitas invisíveis ao RAG vetorial.</p>
+
+    <blockquote>
+      "Global queries about an entire corpus require summarization of the whole — something vector search fundamentally cannot do."
+      <cite>— Edge et al., Microsoft Research (GraphRAG paper, 2024)</cite>
+    </blockquote>
+
+    <h3>Arquitetura do Knowledge Graph</h3>
+    <div class="diagram">
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div class="flow">
+          <div class="flow-box orange">Documentos Brutos</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box purple">Extração LLM<br><small>(entidades + relações)</small></div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box accent">Knowledge Graph</div>
+        </div>
+        <div class="flow">
+          <div class="flow-box orange">Query</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box">Entity Linking</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box accent">Subgrafo Relevante</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box purple">Community Reports</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box">LLM Resposta</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Dois Modos de Query</h3>
+
+    <h4>Local Search</h4>
+    <p>Para perguntas sobre entidades específicas. Navega pelo grafo a partir dos nós relevantes, expandindo para vizinhos e comunidades próximas. Equivale ao RAG vetorial, mas com estrutura relacional.</p>
+
+    <h4>Global Search</h4>
+    <p>Para perguntas analíticas sobre o corpus inteiro ("Quais são os principais temas do relatório?"). Usa <em>community reports</em> — resumos hierárquicos gerados de clusters de entidades — para sintetizar respostas holísticas.</p>
+
+<pre data-lang="python"><code><span class="cm"># Usando o pacote oficial da Microsoft</span>
+<span class="cm"># pip install graphrag</span>
+
+<span class="kw">import</span> graphrag
+
+<span class="cm"># Configuração do índice</span>
+<span class="cm"># graphrag init --root ./my_project</span>
+<span class="cm"># graphrag index --root ./my_project</span>
+
+<span class="cm"># Query local (sobre entidade específica)</span>
+<span class="kw">from</span> graphrag.query.cli <span class="kw">import</span> run_local_search
+
+result = <span class="kw">await</span> run_local_search(
+    config_filepath=<span class="str">"./settings.yml"</span>,
+    data_dir=<span class="str">"./output"</span>,
+    root_dir=<span class="str">"./my_project"</span>,
+    community_level=<span class="num">2</span>,
+    response_type=<span class="str">"multiple paragraphs"</span>,
+    query=<span class="str">"Quem são os principais stakeholders do Projeto Alpha?"</span>
+)
+
+<span class="cm"># Query global (análise do corpus todo)</span>
+<span class="kw">from</span> graphrag.query.cli <span class="kw">import</span> run_global_search
+
+result = <span class="kw">await</span> run_global_search(
+    config_filepath=<span class="str">"./settings.yml"</span>,
+    data_dir=<span class="str">"./output"</span>,
+    community_level=<span class="num">1</span>,
+    query=<span class="str">"Quais são os padrões de risco no portfólio de projetos?"</span>
+)
+</code></pre>
+
+    <h3>Quando GraphRAG Supera o RAG Vetorial</h3>
+    <table class="compare-table">
+      <tr><th>Cenário</th><th>RAG Vetorial</th><th>GraphRAG</th></tr>
+      <tr><td>"Quem é Maria Silva?"</td><td class="yes">✓ Bem</td><td class="yes">✓ Bem</td></tr>
+      <tr><td>"Como A influencia B e C?"</td><td class="no">✗ Fraco</td><td class="yes">✓ Excelente</td></tr>
+      <tr><td>"Quais os temas do corpus?"</td><td class="no">✗ Impossível</td><td class="yes">✓ Global Search</td></tr>
+      <tr><td>"Relacione evento X com Y"</td><td class="no">✗ Perde relação</td><td class="yes">✓ Grafo capta</td></tr>
+      <tr><td>Custo de indexação</td><td class="yes">✓ Baixo</td><td class="no">✗ Alto (LLM p/ extração)</td></tr>
+    </table>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon">⚖️</span>
+        <h5>Inteligência Jurídica</h5>
+        <p>Mapear relacionamentos entre partes, contratos e precedentes em grandes bases de processos.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔬</span>
+        <h5>Pesquisa Científica</h5>
+        <p>Descobrir conexões entre conceitos, autores e experimentos em centenas de papers.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🕵️</span>
+        <h5>Due Diligence</h5>
+        <p>Analisar rede de relacionamentos entre empresas, diretores e riscos em M&A.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">📰</span>
+        <h5>Inteligência de Mídia</h5>
+        <p>Rastrear narrativas, atores e eventos conectados em grandes arquivos jornalísticos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEÇÃO 9 ═══════════ -->
+  <section class="section" id="s9">
+    <div class="section-header">
+      <div class="section-num red">09</div>
+      <div class="section-header-text">
+        <h2>Hybrid RAG</h2>
+        <div class="subtitle">Combinando busca semântica com busca léxica</div>
+      </div>
+    </div>
+
+    <p>O <strong>Hybrid RAG</strong> combina dois paradigmas de busca fundamentalmente diferentes: <em>busca densa</em> (vetorial/semântica) e <em>busca esparsa</em> (BM25/léxica). O resultado é superior a qualquer um isolado, capturando tanto intenção semântica quanto correspondência exata de termos.</p>
+
+    <h3>Dense vs. Sparse — A Diferença Fundamental</h3>
+    <table class="compare-table">
+      <tr><th>Aspecto</th><th>🧠 Dense (Vetorial)</th><th>📖 Sparse (BM25)</th></tr>
+      <tr><td>Método</td><td>Similaridade de embeddings</td><td>TF-IDF / frequência de termos</td></tr>
+      <tr><td>Força</td><td>Entende paráfrase e sinônimos</td><td>Exato em termos técnicos raros</td></tr>
+      <tr><td>Fraqueza</td><td>Falha com jargão específico</td><td>Perde contexto semântico</td></tr>
+      <tr><td>Exemplo Forte</td><td>"carro" encontra "automóvel"</td><td>"CVE-2024-1234" encontra exato</td></tr>
+      <tr><td>Tecnologias</td><td>Pinecone, Qdrant, pgvector</td><td>Elasticsearch, OpenSearch, BM25</td></tr>
+    </table>
+
+    <h3>Reciprocal Rank Fusion (RRF)</h3>
+    <p>O algoritmo RRF é o método padrão para combinar rankings de múltiplos retrievers:</p>
+
+    <div class="formula">
+      RRF_score(d) = Σ 1 / (k + rank_i(d)) &nbsp;&nbsp;&nbsp; onde k = 60 (padrão)
+    </div>
+
+<pre data-lang="python"><code><span class="kw">from</span> langchain.retrievers <span class="kw">import</span> <span class="cls">EnsembleRetriever</span>
+<span class="kw">from</span> langchain_community.retrievers <span class="kw">import</span> <span class="cls">BM25Retriever</span>
+
+<span class="cm"># Retriever esparso (BM25) sobre o texto dos docs</span>
+bm25_retriever = <span class="cls">BM25Retriever</span>.from_documents(docs)
+bm25_retriever.k = <span class="num">4</span>
+
+<span class="cm"># Retriever denso (vetorial)</span>
+vector_retriever = vectorstore.as_retriever(search_kwargs={<span class="str">"k"</span>: <span class="num">4</span>})
+
+<span class="cm"># Ensemble com RRF — pesos iguais</span>
+ensemble = <span class="cls">EnsembleRetriever</span>(
+    retrievers=[bm25_retriever, vector_retriever],
+    weights=[<span class="num">0.5</span>, <span class="num">0.5</span>]
+)
+
+<span class="cm"># Uso idêntico ao retriever normal</span>
+docs = ensemble.invoke(<span class="str">"Qual o prazo máximo conforme cláusula 4.2?"</span>)
+<span class="cm"># BM25 acha "cláusula 4.2" exato; vetor acha "prazo máximo" semanticamente</span>
+</code></pre>
+
+    <h3>Hybrid RAG com Re-ranking</h3>
+    <p>Um passo adicional poderoso: após o RRF, um modelo cross-encoder re-ordena os resultados com maior precisão:</p>
+
+<pre data-lang="python"><code><span class="kw">from</span> langchain.retrievers <span class="kw">import</span> <span class="cls">ContextualCompressionRetriever</span>
+<span class="kw">from</span> langchain_cohere <span class="kw">import</span> <span class="cls">CohereRerank</span>
+
+<span class="cm"># Reranker cross-encoder (Cohere, Jina, ou local)</span>
+compressor = <span class="cls">CohereRerank</span>(model=<span class="str">"rerank-multilingual-v3.0"</span>, top_n=<span class="num">3</span>)
+
+<span class="cm"># Pipeline: Hybrid → Rerank → Top-3</span>
+hybrid_reranked = <span class="cls">ContextualCompressionRetriever</span>(
+    base_compressor=compressor,
+    base_retriever=ensemble
+)
+
+final_docs = hybrid_reranked.invoke(<span class="str">"Quais são as penalidades por atraso?"</span>)
+</code></pre>
+
+    <div class="callout tip">
+      <div class="callout-title">🏆 O Stack Recomendado para Produção</div>
+      <p>Na prática, a combinação <strong>Dense + Sparse + Reranker</strong> é o setup mais robusto: BM25 garante precision em termos exatos, vetorial garante recall semântico, e o reranker elimina o ruído final antes de enviar ao LLM.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEÇÃO 10 ═══════════ -->
+  <section class="section" id="s10">
+    <div class="section-header">
+      <div class="section-num red">10</div>
+      <div class="section-header-text">
+        <h2>RAG-Fusion</h2>
+        <div class="subtitle">Multi-query com fusão por ranking recíproco</div>
+      </div>
+    </div>
+
+    <p>O <strong>RAG-Fusion</strong> resolve um problema fundamental: uma única query raramente captura todas as perspectivas relevantes de uma pergunta. A solução é gerar <em>múltiplas queries</em> automaticamente, recuperar para cada uma, e <em>fundir</em> os resultados via RRF.</p>
+
+    <h3>O Pipeline RAG-Fusion</h3>
+    <div class="diagram">
+      <div class="flow" style="flex-direction:column; align-items:flex-start; gap:12px;">
+        <div class="flow-box orange" style="align-self:flex-start">Query Original</div>
+        <div style="margin-left:20px; border-left: 2px dashed var(--border); padding-left:20px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+            <div class="flow-box purple">Query 1: perspectiva A</div>
+            <div class="flow-box purple">Query 2: perspectiva B</div>
+            <div class="flow-box purple">Query 3: perspectiva C</div>
+            <div class="flow-box purple">Query 4: perspectiva D</div>
+          </div>
+          <div class="flow">
+            <span style="color:var(--muted); font-size:13px;">↓ cada query → retriever → ranking</span>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-box accent">RRF Fusion</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box">Top-K Merged</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box purple">LLM Síntese</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box accent">Resposta Abrangente</div>
+        </div>
+      </div>
+    </div>
+
+<pre data-lang="python"><code><span class="kw">from</span> langchain_core.output_parsers <span class="kw">import</span> <span class="cls">BaseOutputParser</span>
+<span class="kw">from</span> langchain_core.prompts <span class="kw">import</span> <span class="cls">ChatPromptTemplate</span>
+
+<span class="cm"># 1. Gerar múltiplas perspectivas da query</span>
+multi_query_prompt = <span class="cls">ChatPromptTemplate</span>.from_messages([
+    (<span class="str">"system"</span>, <span class="str">"""Você é um especialista em formular buscas.
+Dado a pergunta abaixo, gere 4 versões alternativas que abordem
+diferentes perspectivas, níveis de especificidade e ângulos.
+Retorne as 4 queries, uma por linha."""</span>),
+    (<span class="str">"human"</span>, <span class="str">"{question}"</span>)
+])
+
+<span class="kw">class</span> <span class="cls">LineListParser</span>(<span class="cls">BaseOutputParser</span>):
+    <span class="kw">def</span> <span class="fn">parse</span>(self, text):
+        <span class="kw">return</span> [q.strip() <span class="kw">for</span> q <span class="kw">in</span> text.strip().split(<span class="str">"\n"</span>) <span class="kw">if</span> q.strip()]
+
+generate_queries = multi_query_prompt | llm | <span class="cls">LineListParser</span>()
+
+<span class="cm"># 2. Recuperar para cada query gerada</span>
+<span class="kw">def</span> <span class="fn">retrieve_all</span>(queries):
+    all_results = {}
+    <span class="kw">for</span> q <span class="kw">in</span> queries:
+        docs = retriever.invoke(q)
+        <span class="kw">for</span> i, doc <span class="kw">in</span> <span class="fn">enumerate</span>(docs):
+            key = doc.page_content
+            <span class="kw">if</span> key <span class="kw">not in</span> all_results:
+                all_results[key] = {<span class="str">"doc"</span>: doc, <span class="str">"ranks"</span>: []}
+            all_results[key][<span class="str">"ranks"</span>].append(i + <span class="num">1</span>)
+    <span class="kw">return</span> all_results
+
+<span class="cm"># 3. Reciprocal Rank Fusion</span>
+<span class="kw">def</span> <span class="fn">rrf_score</span>(ranks, k=<span class="num">60</span>):
+    <span class="kw">return</span> <span class="fn">sum</span>(<span class="num">1</span> / (k + r) <span class="kw">for</span> r <span class="kw">in</span> ranks)
+
+<span class="kw">def</span> <span class="fn">rag_fusion</span>(question, top_n=<span class="num">5</span>):
+    queries = generate_queries.invoke({<span class="str">"question"</span>: question})
+    queries.append(question)  <span class="cm"># incluir a original também</span>
+    results = retrieve_all(queries)
+
+    <span class="cm"># Ordenar por RRF score</span>
+    ranked = <span class="fn">sorted</span>(
+        results.values(),
+        key=<span class="kw">lambda</span> x: rrf_score(x[<span class="str">"ranks"</span>]),
+        reverse=<span class="kw">True</span>
+    )
+    <span class="kw">return</span> [r[<span class="str">"doc"</span>] <span class="kw">for</span> r <span class="kw">in</span> ranked[:top_n]]
+
+<span class="cm"># Uso</span>
+top_docs = rag_fusion(<span class="str">"Quais são os riscos do contrato de SaaS?"</span>)
+</code></pre>
+
+    <h3>Exemplos de Multi-Query Gerado</h3>
+    <p>Para a query <em>"Quais são os riscos do contrato de SaaS?"</em>, o LLM pode gerar:</p>
+    <ol>
+      <li>"Cláusulas de rescisão e penalidades em contratos SaaS"</li>
+      <li>"Responsabilidade por falha de serviço e SLA em software como serviço"</li>
+      <li>"Proteção de dados e LGPD em contratos de nuvem"</li>
+      <li>"Propriedade intelectual e portabilidade de dados SaaS"</li>
+    </ol>
+    <p>Cada uma recupera documentos distintos. O RRF garante que os mais relevantes para <em>qualquer</em> perspectiva sobem para o topo.</p>
+
+    <div class="callout info">
+      <div class="callout-title">📐 RAG-Fusion vs. Hybrid RAG</div>
+      <p><strong>Hybrid RAG</strong> combina dois <em>tipos de busca</em> (semântica + léxica) para a mesma query. <strong>RAG-Fusion</strong> usa um único tipo de busca mas múltiplas <em>variações da query</em>. Eles são complementares e podem ser combinados.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEÇÃO 11 ═══════════ -->
+  <section class="section" id="s11">
+    <div class="section-header">
+      <div class="section-num">11</div>
+      <div class="section-header-text">
+        <h2>HyDE — Hypothetical Document Embeddings</h2>
+        <div class="subtitle">Gere o documento que você quer encontrar</div>
+      </div>
+    </div>
+
+    <p>Proposto por Gao et al. (2022), o <strong>HyDE</strong> é uma técnica de <em>query expansion</em> radical: em vez de embedar a query diretamente, o LLM primeiro <em>imagina</em> um documento hipotético que responderia à pergunta — e embeda <em>esse documento</em> para a busca.</p>
+
+    <blockquote>
+      "A query is a question. A document is an answer. They live in different spaces. HyDE bridges this gap."
+      <cite>— Gao et al., "Precise Zero-Shot Dense Retrieval without Relevance Labels" (2022)</cite>
+    </blockquote>
+
+    <h3>O Problema do "Gap Semântico"</h3>
+    <p>Existe uma assimetria fundamental entre queries e documentos no espaço de embeddings:</p>
+    <ul>
+      <li>Query: <em>"Como funciona a autenticação OAuth2?"</em> — curta, sem resposta</li>
+      <li>Documento relevante: <em>explicação técnica de 3 parágrafos sobre OAuth2</em> — rico, detalhado</li>
+    </ul>
+    <p>O vetor de uma pergunta curta e o vetor de uma resposta longa podem estar <em>distantes no espaço vetorial</em>, mesmo sendo semanticamente relacionados. HyDE resolve isso gerando um "documento hipotético" que vive no mesmo espaço que os documentos reais.</p>
+
+    <div class="diagram">
+      <div class="flow" style="flex-direction:column; gap:16px; align-items:flex-start;">
+        <div class="flow" style="gap:8px;">
+          <div class="flow-box orange">Query</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box purple">LLM: "Imagine a doc that answers this"</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box accent">Hypothetical Doc</div>
+        </div>
+        <div class="flow" style="gap:8px;">
+          <div class="flow-box accent">Hypothetical Doc</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box">Embed</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box purple">Vector Search</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box orange">Docs Reais</div>
+        </div>
+        <div class="flow" style="gap:8px;">
+          <div class="flow-box orange">Docs Reais</div>
+          <span class="flow-arrow">+</span>
+          <div class="flow-box orange">Query original</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box accent">LLM → Resposta Final</div>
+        </div>
+      </div>
+    </div>
+
+<pre data-lang="python"><code><span class="kw">from</span> langchain.chains <span class="kw">import</span> <span class="cls">HypotheticalDocumentEmbedder</span>
+<span class="kw">from</span> langchain_openai <span class="kw">import</span> <span class="cls">OpenAIEmbeddings</span>
+
+<span class="cm"># Prompt para gerar documento hipotético</span>
+hyde_prompt = <span class="cls">ChatPromptTemplate</span>.from_messages([
+    (<span class="str">"system"</span>, <span class="str">"""Você é um especialista técnico.
+Escreva um parágrafo detalhado que responderia à pergunta abaixo,
+como se fosse extraído de um manual técnico ou documentação oficial.
+Seja específico e factual. Use terminologia técnica adequada."""</span>),
+    (<span class="str">"human"</span>, <span class="str">"{question}"</span>)
+])
+
+hyde_chain = hyde_prompt | llm | <span class="cls">StrOutputParser</span>()
+
+<span class="cm"># Gerar documento hipotético e embedar</span>
+<span class="kw">def</span> <span class="fn">hyde_retriever</span>(query, k=<span class="num">4</span>):
+    <span class="cm"># Gerar doc hipotético</span>
+    hyp_doc = hyde_chain.invoke({<span class="str">"question"</span>: query})
+
+    <span class="cm"># Embedar o doc hipotético (não a query original)</span>
+    hyp_embedding = embeddings.embed_query(hyp_doc)
+
+    <span class="cm"># Buscar documentos reais usando embedding do doc hipotético</span>
+    results = vectorstore.similarity_search_by_vector(hyp_embedding, k=k)
+
+    <span class="kw">return</span> results
+
+<span class="cm"># Alternativa: usando LangChain nativo</span>
+hyde_embeddings = <span class="cls">HypotheticalDocumentEmbedder</span>.from_llm(
+    llm=llm,
+    embeddings=<span class="cls">OpenAIEmbeddings</span>(),
+    prompt_key=<span class="str">"web_search"</span>  <span class="cm"># template interno</span>
+)
+
+<span class="cm"># Usar como retriever normal</span>
+hyde_vectorstore = <span class="cls">Chroma</span>(embedding_function=hyde_embeddings)
+</code></pre>
+
+    <h3>HyDE com Múltiplos Documentos Hipotéticos</h3>
+    <p>Uma variante poderosa: gerar <code>n</code> documentos hipotéticos diferentes, embedar cada um, calcular a <em>média dos vetores</em>, e usar o centroide para a busca. Isso captura múltiplas perspectivas da resposta esperada:</p>
+
+<pre data-lang="python"><code><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">hyde_multi</span>(query, n=<span class="num">5</span>, k=<span class="num">4</span>):
+    <span class="cm"># Gerar n documentos hipotéticos com temperatura alta</span>
+    hyp_docs = [hyde_chain.invoke({<span class="str">"question"</span>: query}) <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(n)]
+
+    <span class="cm"># Embedar todos e calcular centroide</span>
+    embeddings_list = [embeddings.embed_query(d) <span class="kw">for</span> d <span class="kw">in</span> hyp_docs]
+    centroid = np.mean(embeddings_list, axis=<span class="num">0</span>).tolist()
+
+    <span class="cm"># Buscar com vetor médio</span>
+    <span class="kw">return</span> vectorstore.similarity_search_by_vector(centroid, k=k)
+</code></pre>
+
+    <h3>Quando HyDE Brilha</h3>
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon">🔬</span>
+        <h5>Domínios Técnicos Profundos</h5>
+        <p>Perguntas sobre biomedicina, engenharia, direito — onde queries curtas não capturam o vocabulário técnico dos documentos.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🌍</span>
+        <h5>Multilíngue Cross-lingual</h5>
+        <p>Query em português, documentos em inglês. HyDE gera o doc hipotético no idioma dos documentos.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">📚</span>
+        <h5>Zero-Shot Dense Retrieval</h5>
+        <p>Sem fine-tuning do embedding model — HyDE melhora recall sem nenhum dado de treinamento específico do domínio.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">❓</span>
+        <h5>Perguntas Abertas</h5>
+        <p>Quando a query é vaga ou ambígua, o LLM "concretiza" a intenção gerando um documento que explicita o que o usuário provavelmente quer.</p>
+      </div>
+    </div>
+
+    <div class="callout danger">
+      <div class="callout-title">⚠️ Limitação do HyDE</div>
+      <p>Se o LLM alucinar no documento hipotético, o vetor resultante pode apontar para direção errada. Use HyDE com modelos de alta qualidade e em domínios onde o LLM tem conhecimento razoável do vocabulário esperado. Para domínios altamente proprietários e únicos, prefira RAG-Fusion ou Hybrid RAG.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEÇÃO 12 ═══════════ -->
+  <section class="section" id="s12">
+    <div class="section-header">
+      <div class="section-num">12</div>
+      <div class="section-header-text">
+        <h2>Comparativo Geral</h2>
+        <div class="subtitle">Todas as arquiteturas lado a lado</div>
+      </div>
+    </div>
+
+    <table class="compare-table">
+      <tr>
+        <th>Arquitetura</th>
+        <th>Complexidade</th>
+        <th>Latência</th>
+        <th>Multi-hop</th>
+        <th>Auto-correção</th>
+        <th>Relações</th>
+        <th>Custo</th>
+      </tr>
+      <tr>
+        <td><strong>RAG Clássico</strong></td>
+        <td class="yes">Baixa</td>
+        <td class="yes">Baixa</td>
+        <td class="no">✗</td>
+        <td class="no">✗</td>
+        <td class="no">✗</td>
+        <td class="yes">Baixo</td>
+      </tr>
+      <tr>
+        <td><strong>RAG c/ Memória</strong></td>
+        <td class="partial">Média</td>
+        <td class="partial">Média</td>
+        <td class="partial">~</td>
+        <td class="no">✗</td>
+        <td class="no">✗</td>
+        <td class="partial">Médio</td>
+      </tr>
+      <tr>
+        <td><strong>Agentic RAG</strong></td>
+        <td class="no">Alta</td>
+        <td class="no">Alta</td>
+        <td class="yes">✓✓</td>
+        <td class="yes">✓</td>
+        <td class="partial">~</td>
+        <td class="no">Alto</td>
+      </tr>
+      <tr>
+        <td><strong>CRAG</strong></td>
+        <td class="partial">Média</td>
+        <td class="partial">Média</td>
+        <td class="no">✗</td>
+        <td class="yes">✓✓</td>
+        <td class="no">✗</td>
+        <td class="partial">Médio</td>
+      </tr>
+      <tr>
+        <td><strong>Adaptive RAG</strong></td>
+        <td class="partial">Média</td>
+        <td class="partial">Variável</td>
+        <td class="yes">✓</td>
+        <td class="partial">~</td>
+        <td class="no">✗</td>
+        <td class="yes">Otimizado</td>
+      </tr>
+      <tr>
+        <td><strong>GraphRAG</strong></td>
+        <td class="no">Muito Alta</td>
+        <td class="partial">Média</td>
+        <td class="yes">✓✓</td>
+        <td class="no">✗</td>
+        <td class="yes">✓✓</td>
+        <td class="no">Alto</td>
+      </tr>
+      <tr>
+        <td><strong>Hybrid RAG</strong></td>
+        <td class="partial">Média</td>
+        <td class="yes">Baixa</td>
+        <td class="no">✗</td>
+        <td class="no">✗</td>
+        <td class="no">✗</td>
+        <td class="partial">Médio</td>
+      </tr>
+      <tr>
+        <td><strong>RAG-Fusion</strong></td>
+        <td class="partial">Média</td>
+        <td class="partial">Média</td>
+        <td class="no">✗</td>
+        <td class="no">✗</td>
+        <td class="no">✗</td>
+        <td class="partial">Médio</td>
+      </tr>
+      <tr>
+        <td><strong>HyDE</strong></td>
+        <td class="yes">Baixa</td>
+        <td class="partial">Média</td>
+        <td class="no">✗</td>
+        <td class="no">✗</td>
+        <td class="no">✗</td>
+        <td class="partial">Médio</td>
+      </tr>
+    </table>
+  </section>
+
+  <!-- ═══════════ SEÇÃO 13 ═══════════ -->
+  <section class="section" id="s13">
+    <div class="section-header">
+      <div class="section-num">13</div>
+      <div class="section-header-text">
+        <h2>Quando Usar Qual</h2>
+        <div class="subtitle">Guia de decisão para aplicações reais</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">🎯 Regra de Ouro</div>
+      <p>Comece com o <strong>Hybrid RAG</strong> (Dense + BM25 + Reranker). É o melhor baseline de produção. Adicione complexidade (Agentic, GraphRAG, CRAG) apenas quando o problema concreto exigir.</p>
+    </div>
+
+    <h3>Por Problema</h3>
+    <table class="compare-table">
+      <tr><th>Problema</th><th>Solução Recomendada</th><th>Raciocínio</th></tr>
+      <tr><td>FAQ corporativo simples</td><td class="yes">RAG Clássico</td><td>Baixo custo, fácil manutenção</td></tr>
+      <tr><td>Assistente com histórico de usuário</td><td class="yes">RAG c/ Memória</td><td>Personalização e continuidade</td></tr>
+      <tr><td>Base incompleta, precisar de fallback web</td><td class="yes">CRAG</td><td>Auto-correção e fallback robusto</td></tr>
+      <tr><td>Análise de relações entre entidades</td><td class="yes">GraphRAG</td><td>Só o grafo capta conexões implícitas</td></tr>
+      <tr><td>Termos técnicos exatos (CVEs, IDs, códigos)</td><td class="yes">Hybrid RAG</td><td>BM25 garante match exato</td></tr>
+      <tr><td>Pesquisa multifacetada e abrangente</td><td class="yes">RAG-Fusion</td><td>Multi-query maximiza recall</td></tr>
+      <tr><td>Domínio técnico especializado</td><td class="yes">HyDE</td><td>Fecha o gap semântico query-doc</td></tr>
+      <tr><td>Research agent com múltiplas fontes</td><td class="yes">Agentic RAG</td><td>Raciocínio e planejamento flexível</td></tr>
+      <tr><td>Volume variável de complexidade</td><td class="yes">Adaptive RAG</td><td>Custo-eficiência adaptativa</td></tr>
+    </table>
+
+    <h3>Por Setor</h3>
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon">🏥</span>
+        <h5>Saúde</h5>
+        <p><strong>CRAG + Hybrid RAG</strong>. Precisão crítica: CRAG evita alucinações, Hybrid garante termos médicos exatos (CID-10, nomes de medicamentos).</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">⚖️</span>
+        <h5>Jurídico</h5>
+        <p><strong>GraphRAG + RAG-Fusion</strong>. Relações entre leis, jurisprudências e partes. RAG-Fusion explora múltiplas interpretações legais.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">💰</span>
+        <h5>Financeiro</h5>
+        <p><strong>Adaptive RAG + Memória</strong>. Queries variam de simples (cotação) a complexas (análise de risco). Memória mantém contexto do portfólio.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🛒</span>
+        <h5>E-commerce / Suporte</h5>
+        <p><strong>Hybrid RAG + Memória</strong>. SKUs e códigos de produto precisam de match exato. Memória lembra histórico de compras e preferências.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔬</span>
+        <h5>Pesquisa Científica</h5>
+        <p><strong>HyDE + GraphRAG</strong>. HyDE fecha o gap em linguagem científica densa. GraphRAG mapeia citações e conceitos relacionados.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🏗️</span>
+        <h5>Engenharia de Software</h5>
+        <p><strong>Agentic RAG + Hybrid</strong>. Agente usa múltiplas ferramentas (docs, issues, código). Hybrid garante busca exata em APIs e erros.</p>
+      </div>
+    </div>
+
+    <h3>Stack de Evolução Recomendado</h3>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="pipeline-step-num">v1</div>
+        <div class="pipeline-step-body">
+          <h4>MVP (Semana 1–2)</h4>
+          <p>RAG Clássico com OpenAI Embeddings + Chroma/pgvector. Valida o conceito e mede qualidade inicial com RAGAS.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num">v2</div>
+        <div class="pipeline-step-body">
+          <h4>Produção Básica (Mês 1)</h4>
+          <p>Adicionar BM25 (Hybrid RAG) + Reranker Cohere. Ganho de +15–30% em precision. Implementar avaliação contínua.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num">v3</div>
+        <div class="pipeline-step-body">
+          <h4>Produção Avançada (Mês 2–3)</h4>
+          <p>Adicionar CRAG para casos de fallback + Memória para UX personalizada. Considerar HyDE se domínio técnico.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num">v4</div>
+        <div class="pipeline-step-body">
+          <h4>Enterprise (Mês 4+)</h4>
+          <p>Adaptive RAG para otimização de custo em escala. GraphRAG para análises relacionais. Agentic RAG para automação complexa.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:48px; padding:28px; background:var(--surface); border:1px solid var(--border); border-radius:14px;">
+      <div style="font-family:'Outfit',sans-serif; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent); margin-bottom:12px;">Ferramentas do Ecossistema</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; font-size:13px;">
+        <div>
+          <div style="color:var(--muted); font-size:10px; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px; font-family:'DM Mono',monospace;">Frameworks</div>
+          <div style="color:var(--text);">LangChain · LangGraph<br>LlamaIndex · Haystack<br>DSPy · CrewAI</div>
+        </div>
+        <div>
+          <div style="color:var(--muted); font-size:10px; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px; font-family:'DM Mono',monospace;">Vector Stores</div>
+          <div style="color:var(--text);">Pinecone · Qdrant<br>Weaviate · Chroma<br>pgvector · Milvus</div>
+        </div>
+        <div>
+          <div style="color:var(--muted); font-size:10px; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px; font-family:'DM Mono',monospace;">Avaliação</div>
+          <div style="color:var(--text);">RAGAS · TruLens<br>DeepEval · Arize<br>LangSmith · Helicone</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // Highlight active nav link on scroll
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('nav a');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + entry.target.id) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
