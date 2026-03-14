@@ -517,6 +517,32 @@
     color: var(--accent3);
   }
 
+  /* ── FUNÇÃO BOX ── */
+  .funcao {
+    border-left: 3px solid var(--accent3);
+    padding: 12px 20px 14px;
+    margin: 16px 0 0;
+    background: rgba(245,166,35,.04);
+    border-radius: 0 10px 10px 0;
+  }
+  .funcao-label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-style: normal;
+    color: var(--accent3);
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .funcao-desc {
+    font-style: italic;
+    color: #a0a6b8;
+    font-size: 14.5px;
+    line-height: 1.65;
+    margin: 0;
+  }
+
   /* ── PROGRESS / MATURITY BAR ── */
   .metric-row { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
   .metric { display: flex; align-items: center; gap: 12px; font-family: 'DM Mono', monospace; font-size: 12px; }
@@ -746,6 +772,7 @@
         <div class="pipeline-step-body">
           <h4>Chunking (Fragmentação)</h4>
           <p>Documentos grandes são quebrados em pedaços menores. A estratégia importa: chunk fixo (512 tokens), por sentença, por parágrafo, ou hierárquico. Chunks muito pequenos perdem contexto; muito grandes prejudicam a precisão da busca.</p>
+          <div class="funcao"><span class="funcao-label">Função</span><p class="funcao-desc">Dividir o conteúdo em unidades indexáveis sem perder coerência semântica.</p></div>
         </div>
       </div>
       <div class="pipeline-step">
@@ -753,6 +780,7 @@
         <div class="pipeline-step-body">
           <h4>Embedding</h4>
           <p>Cada chunk é convertido em um vetor numérico de alta dimensão (ex: 1536 dimensões no text-embedding-3-small da OpenAI) por um modelo de embedding. Textos semanticamente similares ficam próximos nesse espaço vetorial.</p>
+          <div class="funcao"><span class="funcao-label">Função</span><p class="funcao-desc">Transformar texto em coordenadas numéricas para que a similaridade de significado vire uma distância calculável.</p></div>
         </div>
       </div>
       <div class="pipeline-step">
@@ -760,6 +788,7 @@
         <div class="pipeline-step-body">
           <h4>Vector Store</h4>
           <p>Os vetores são armazenados em bancos especializados (Pinecone, Weaviate, Chroma, pgvector, Qdrant). Permitem busca por similaridade com complexidade O(log n) via HNSW ou FAISS.</p>
+          <div class="funcao"><span class="funcao-label">Função</span><p class="funcao-desc">Encontrar os documentos semanticamente mais próximos da pergunta.</p></div>
         </div>
       </div>
     </div>
