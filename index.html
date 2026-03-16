@@ -105,6 +105,69 @@
     min-width: 20px;
     font-weight: 500;
   }
+  .nav-group-toggle .nav-num {
+    font-size: 10px;
+    color: var(--accent);
+    min-width: 20px;
+    font-weight: 500;
+    font-family: 'DM Mono', monospace;
+    flex-shrink: 0;
+  }
+
+  /* ── NAV ACCORDION GROUP ── */
+  .nav-group {}
+
+  .nav-group-toggle {
+    display: flex;
+    align-items: center;
+    padding: 8px 24px;
+    cursor: pointer;
+    user-select: none;
+    border-left: 2px solid transparent;
+    transition: all .15s ease;
+    gap: 10px;
+  }
+  .nav-group-toggle:hover {
+    background: rgba(255,255,255,.03);
+    border-left-color: var(--accent);
+  }
+  .nav-group-toggle .toggle-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-group-toggle:hover .toggle-label { color: var(--text); }
+  .nav-group-toggle .toggle-arrow {
+    font-size: 9px;
+    color: var(--accent);
+    transition: transform .2s ease;
+    flex-shrink: 0;
+  }
+  .nav-group.open .toggle-arrow { transform: rotate(90deg); }
+
+  .nav-group-items {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .25s ease;
+  }
+  .nav-group.open .nav-group-items { max-height: 600px; }
+
+  .nav-group-items a {
+    padding-left: 36px;
+    font-size: 11px;
+    border-left: 2px solid transparent;
+  }
+  .nav-group-items a::before {
+    content: '·';
+    color: var(--accent);
+    font-size: 14px;
+    margin-right: 4px;
+    flex-shrink: 0;
+  }
 
   /* ── MAIN CONTENT ── */
   main {
@@ -604,9 +667,68 @@
   <div class="nav-section-title">Técnica Avançada</div>
   <a href="#s11"><span class="nav-num">11</span> HyDE</a>
 
+  <div class="nav-group" id="nav-7arch">
+    <div class="nav-group-toggle" onclick="toggleNavGroup('nav-7arch')">
+      <span class="nav-num">12</span>
+      <span class="toggle-label">7 Arquiteturas Avançadas</span>
+      <span class="toggle-arrow">▶</span>
+    </div>
+    <div class="nav-group-items">
+      <a href="#arch1"><span class="nav-num">A1</span> Self-RAG</a>
+      <a href="#arch2"><span class="nav-num">A2</span> Query Decomposition</a>
+      <a href="#arch3"><span class="nav-num">A3</span> Agentic RAG</a>
+      <a href="#arch4"><span class="nav-num">A4</span> Multi-Agent RAG</a>
+      <a href="#arch5"><span class="nav-num">A5</span> GraphRAG</a>
+      <a href="#arch6"><span class="nav-num">A6</span> Tool-Augmented RAG</a>
+      <a href="#arch7"><span class="nav-num">A7</span> Retrieval Planning RAG</a>
+    </div>
+  </div>
+  <a href="#s17"><span class="nav-num">13</span> Mapa Visual — Engenharia</a>
+  <a href="#s18"><span class="nav-num">14</span> Stack Tecnológico</a>
+
+  <div class="nav-group" id="nav-12tecnicas">
+    <div class="nav-group-toggle" onclick="toggleNavGroup('nav-12tecnicas')">
+      <span class="nav-num">15</span>
+      <span class="toggle-label">12 Técnicas de Precisão</span>
+      <span class="toggle-arrow">▶</span>
+    </div>
+    <div class="nav-group-items">
+      <a href="#p01"><span class="nav-num">P01</span> RAPTOR</a>
+      <a href="#p02"><span class="nav-num">P02</span> ColBERT</a>
+      <a href="#p03"><span class="nav-num">P03</span> Parent-Child Chunking</a>
+      <a href="#p04"><span class="nav-num">P04</span> Semantic Chunking</a>
+      <a href="#p05"><span class="nav-num">P05</span> Hybrid Retrieval</a>
+      <a href="#p06"><span class="nav-num">P06</span> Reranking</a>
+      <a href="#p07"><span class="nav-num">P07</span> Query Rewriting</a>
+      <a href="#p08"><span class="nav-num">P08</span> RAG-Fusion</a>
+      <a href="#p09"><span class="nav-num">P09</span> HyDE</a>
+      <a href="#p10"><span class="nav-num">P10</span> Metadata Filtering</a>
+      <a href="#p11"><span class="nav-num">P11</span> Context Compression</a>
+      <a href="#p12"><span class="nav-num">P12</span> Semantic Cache</a>
+    </div>
+  </div>
+  <a href="#s19"><span class="nav-num">16</span> Arquitetura de Startups AI</a>
+  <a href="#s20"><span class="nav-num">17</span> Blueprint Agentic RAG SaaS</a>
+
   <div class="nav-section-title">Referência</div>
-  <a href="#s12"><span class="nav-num">12</span> Comparativo Geral</a>
-  <a href="#s13"><span class="nav-num">13</span> Quando Usar Qual</a>
+  <a href="#s12"><span class="nav-num">18</span> Comparativo Geral</a>
+  <a href="#s13"><span class="nav-num">19</span> Quando Usar Qual</a>
+
+  <div class="nav-group" id="nav-tendencias">
+    <div class="nav-group-toggle" onclick="toggleNavGroup('nav-tendencias')">
+      <span class="nav-num">20</span>
+      <span class="toggle-label">Tendências e Avanços | RAG</span>
+      <span class="toggle-arrow">▶</span>
+    </div>
+    <div class="nav-group-items">
+      <a href="#s14"><span class="nav-num">T1</span> Arquitetura Moderna</a>
+      <a href="#s15"><span class="nav-num">T2</span> O Futuro: RAG + Agentes</a>
+      <a href="#s21"><span class="nav-num">T3</span> SaaS de Agentes RAG</a>
+      <a href="#s22"><span class="nav-num">T4</span> 10 Falhas em Produção</a>
+    </div>
+  </div>
+
+  <a href="#s16"><span class="nav-num">23</span> Conclusão Estratégica</a>
 </nav>
 
 <!-- ═══════════════════════════════ MAIN ════════════════════════════════ -->
@@ -854,6 +976,7 @@ result = qa_chain.invoke({<span class="str">"query"</span>: <span class="str">"Q
       </div>
     </div>
     <p style="font-size:13px; color:var(--muted)">Frameworks como <strong>RAGAS</strong> e <strong>TruLens</strong> automatizam essas métricas para avaliação contínua.</p>
+
   </section>
 
   <!-- ═══════════ SEÇÃO 3 ═══════════ -->
@@ -1822,10 +1945,865 @@ hyde_vectorstore = <span class="cls">Chroma</span>(embedding_function=hyde_embed
     </div>
   </section>
 
+  <!-- ═══════════ 7 ARQUITETURAS AVANÇADAS ═══════════ -->
+  <section class="section" id="s-7arch">
+    <div class="section-header">
+      <div class="section-num purple">12</div>
+      <div class="section-header-text">
+        <h2>As 7 Arquiteturas Avançadas de RAG</h2>
+        <div class="subtitle">Nível papers de pesquisa · Produtos de GenAI em produção</div>
+      </div>
+    </div>
+
+    <p>Essas arquiteturas são usadas ou estudadas por empresas como OpenAI, Google DeepMind, Anthropic, Meta e Contextual AI. Surgiram para resolver os limites estruturais do RAG clássico: retrieval fraco, raciocínio superficial e incapacidade de lidar com tarefas complexas e múltiplas fontes.</p>
+
+    <div class="callout info">
+      <div class="callout-title">💡 A Virada Conceitual</div>
+      <p>RAG moderno deixou de ser <em>busca + geração</em> para se tornar um <strong>sistema de raciocínio com busca</strong>. A distinção não é semântica — ela muda completamente como a arquitetura é projetada.</p>
+    </div>
+
+    <!-- ARCH 1 -->
+    <h3 id="arch1">A1 · Self-RAG — Self-Reflective Retrieval</h3>
+    <p>Sistema de RAG que <em>reflete sobre a qualidade do próprio retrieval</em> e decide autonomamente se deve buscar novamente, reformular a query ou continuar com o contexto atual. Usa <strong>tokens de reflexão internos</strong> — sinais que o modelo gera para avaliar a relevância do que acabou de recuperar antes de prosseguir.</p>
+
+    <div class="diagram">
+      <div class="flow" style="flex-direction:column; align-items:flex-start; gap:4px;">
+        <div class="flow-box orange" style="align-self:center">Query</div>
+        <div style="align-self:center; color:var(--muted)">↓</div>
+        <div class="flow-box" style="align-self:center">Initial Retrieval</div>
+        <div style="align-self:center; color:var(--muted)">↓</div>
+        <div class="flow-box purple" style="align-self:center">LLM Reflection — avalia qualidade do contexto</div>
+        <div style="align-self:center; color:var(--muted)">↓</div>
+        <div style="display:flex; gap:16px; align-self:center; flex-wrap:wrap; justify-content:center;">
+          <div class="flow-box red">re-retrieve</div>
+          <div class="flow-box orange">refine query</div>
+          <div class="flow-box accent">contexto suficiente</div>
+        </div>
+        <div style="align-self:center; color:var(--muted)">↓</div>
+        <div class="flow-box accent" style="align-self:center">Resposta Final</div>
+      </div>
+    </div>
+
+    <p>O impacto técnico é a introdução de um <strong>loop de avaliação automática</strong> com três camadas: geração, verificação e recuperação iterativa. Complexidade de implementação: <strong>Média-Alta</strong> — requer scoring de relevância, re-query pipelines e controle de loops.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon">🏢</span>
+        <h5>Aplicações</h5>
+        <p>Assistentes empresariais, sistemas jurídicos, análise científica onde a confiabilidade do contexto é crítica.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔬</span>
+        <h5>Interesse de Mercado</h5>
+        <p>OpenAI · Anthropic · Contextual AI — empresas onde precisão e auditabilidade do retrieval são requisitos de produto.</p>
+      </div>
+    </div>
+
+    <!-- ARCH 2 -->
+    <h3 id="arch2">A2 · Query Decomposition / Multi-Hop RAG</h3>
+    <p>Divide perguntas complexas em <strong>subperguntas menores e independentes</strong>, executa retrieval paralelo para cada uma e agrega as evidências antes da síntese final. É a arquitetura dominante para raciocínio analítico que exige cruzar múltiplos documentos ou perspectivas.</p>
+
+    <div class="callout tip">
+      <div class="callout-title">📐 Exemplo de Decomposição</div>
+      <p><em>Query original:</em> "Como a política monetária do FED impacta o mercado de criptomoedas?"<br><br>
+      <em>Decomposta em:</em><br>
+      1 — Impacto da política monetária no mercado financeiro<br>
+      2 — Relação entre liquidez global e crypto<br>
+      3 — Histórico de ciclos FED vs BTC</p>
+    </div>
+
+    <div class="diagram">
+      <div class="flow" style="flex-direction:column; align-items:center; gap:4px;">
+        <div class="flow-box orange">Query</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box purple">Decomposition Agent</div>
+        <div style="color:var(--muted)">↓</div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center;">
+          <div class="flow-box">Sub-query 1</div>
+          <div class="flow-box">Sub-query 2</div>
+          <div class="flow-box">Sub-query 3</div>
+        </div>
+        <div style="color:var(--muted)">↓ Parallel Retrieval ↓</div>
+        <div class="flow-box purple">Aggregation</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box accent">LLM Synthesis</div>
+      </div>
+    </div>
+
+    <p>Sistemas modernos usam <strong>grafos de evidência (DAGs)</strong> para mapear dependências entre subperguntas. Complexidade: <strong>Alta</strong> — requer planner agent, DAG de consultas e agregação de evidências.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon">📊</span>
+        <h5>Aplicações</h5>
+        <p>Análise regulatória, inteligência de mercado, pesquisa científica com múltiplas fontes cruzadas.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔬</span>
+        <h5>Interesse de Mercado</h5>
+        <p>Google DeepMind · Meta · Empresas de pesquisa científica e análise competitiva.</p>
+      </div>
+    </div>
+
+    <!-- ARCH 3 -->
+    <h3 id="arch3">A3 · Agentic RAG</h3>
+    <p>RAG controlado por agentes autônomos que <strong>planejam a estratégia de recuperação</strong> em vez de seguir um pipeline fixo. A diferença fundamental: não é uma sequência determinística de etapas — é um <em>sistema de decisão</em> onde o agente escolhe dinamicamente quantas buscas fazer, quais fontes consultar e quando parar.</p>
+
+    <div class="diagram">
+      <div class="flow" style="flex-direction:column; align-items:center; gap:4px;">
+        <div class="flow-box orange">User Query</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box purple">Planner Agent</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box">Retriever Tools</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box purple">Knowledge Evaluation</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box accent">LLM Synthesis</div>
+      </div>
+    </div>
+
+    <p>Complexidade: <strong>Muito Alta</strong> — necessita tool orchestration, planner e executor coordenados. Coberto em profundidade na <a href="#s5" style="color:var(--accent)">Seção 05 — Agentic RAG</a>.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon">🤖</span>
+        <h5>Aplicações</h5>
+        <p>Copilots corporativos, research agents, automação de processos de conhecimento intensivo.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔬</span>
+        <h5>Interesse de Mercado</h5>
+        <p>OpenAI · Anthropic · Startups de agentes autônomos como LangChain, CrewAI, AutoGen.</p>
+      </div>
+    </div>
+
+    <!-- ARCH 4 -->
+    <h3 id="arch4">A4 · Multi-Agent RAG</h3>
+    <p>Múltiplos agentes especializados <strong>colaboram em paralelo</strong> no pipeline, cada um com função específica e bem delimitada. O modelo imita um time de pesquisa humano — com papéis distintos que se complementam e se criticam mutuamente.</p>
+
+    <div class="diagram">
+      <div class="flow" style="flex-direction:column; align-items:center; gap:4px;">
+        <div class="flow-box orange">User Query</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box purple">Planner Agent — define estratégia</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box">Retriever Agents — buscam em paralelo</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box">Extractor Agent — filtra e estrutura</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box red">Critic Agent — valida e questiona</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box accent">Writer Agent — gera resposta final</div>
+      </div>
+    </div>
+
+    <p>Habilita <strong>paralelismo, raciocínio iterativo e crítica interna</strong> — o Critic Agent é o diferencial: ele desafia as evidências antes da síntese, reduzindo alucinação. Complexidade: <strong>Extrema</strong> — requer coordenação e comunicação inter-agent robusta.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon">🧬</span>
+        <h5>Aplicações</h5>
+        <p>Análise científica profunda, sistemas de pesquisa automatizada, consultoria estratégica automatizada.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔬</span>
+        <h5>Interesse de Mercado</h5>
+        <p>Google DeepMind · Meta — projetos de pesquisa que requerem síntese de múltiplas fontes heterogêneas.</p>
+      </div>
+    </div>
+
+    <!-- ARCH 5 -->
+    <h3 id="arch5">A5 · GraphRAG</h3>
+    <p>RAG baseado em <strong>grafos de conhecimento</strong> — em vez de recuperar chunks textuais, recupera <em>relações entre entidades</em>. A unidade de conhecimento não é o parágrafo, é a tripla <code>Entidade → Relação → Entidade</code>. Coberto em profundidade na <a href="#s8" style="color:var(--accent)">Seção 08 — GraphRAG</a>.</p>
+
+    <div class="diagram">
+      <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center; align-items:center; font-family:'DM Mono',monospace; font-size:12px;">
+        <div class="flow-box accent">Empresa</div>
+        <span style="color:var(--muted)">→ CEO →</span>
+        <div class="flow-box accent">Estratégia</div>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center; align-items:center; font-family:'DM Mono',monospace; font-size:12px; margin-top:8px;">
+        <div class="flow-box accent">Empresa</div>
+        <span style="color:var(--muted)">→ Aquisição →</span>
+        <div class="flow-box purple">Startup</div>
+        <span style="color:var(--muted)">→ Mercado →</span>
+        <div class="flow-box orange">IA</div>
+      </div>
+    </div>
+
+    <p>Complexidade: <strong>Alta</strong> — necessita knowledge graph pré-construído e entity linking. Microsoft e Google são os principais investidores em pesquisa nessa arquitetura.</p>
+
+    <!-- ARCH 6 -->
+    <h3 id="arch6">A6 · Tool-Augmented RAG</h3>
+    <p>RAG integrado a <strong>ferramentas externas</strong> — o modelo não se limita ao vector store. Pode acionar APIs, bancos de dados, motores de cálculo e web search em tempo real, combinando conhecimento indexado com dados ao vivo.</p>
+
+    <div class="callout tip">
+      <div class="callout-title">📐 Exemplo de Execução</div>
+      <p><em>Query:</em> "Qual o crescimento do PIB do Brasil nos últimos 3 anos?"<br><br>
+      1 — Agente identifica que precisa de dados em tempo real<br>
+      2 — Aciona API do Banco Mundial / IBGE<br>
+      3 — Recupera série histórica<br>
+      4 — Combina com contexto interno e gera resposta com dados atualizados</p>
+    </div>
+
+    <div class="diagram">
+      <div class="flow" style="flex-direction:column; align-items:center; gap:4px;">
+        <div class="flow-box orange">Query</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box purple">Agent — identifica ferramentas necessárias</div>
+        <div style="color:var(--muted)">↓</div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center;">
+          <div class="flow-box">APIs</div>
+          <div class="flow-box">Databases</div>
+          <div class="flow-box">Web Search</div>
+          <div class="flow-box">Calculators</div>
+        </div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box accent">LLM — síntese com dados ao vivo</div>
+      </div>
+    </div>
+
+    <p>Complexidade: <strong>Alta</strong> — necessita tool registry e permission layer para controle de acesso às ferramentas. Ideal para cenários onde os dados mudam frequentemente e o vector store ficaria desatualizado.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon">💹</span>
+        <h5>Aplicações</h5>
+        <p>Copilots financeiros com dados de mercado ao vivo, BI automation, análise de dados operacionais em tempo real.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔬</span>
+        <h5>Interesse de Mercado</h5>
+        <p>OpenAI (GPT com Function Calling) · Google (Gemini com Tool Use) — integração nativa nos principais LLMs.</p>
+      </div>
+    </div>
+
+    <!-- ARCH 7 -->
+    <h3 id="arch7">A7 · Retrieval Planning RAG</h3>
+    <p>Sistema que <strong>planeja estrategicamente como recuperar conhecimento</strong> antes de executar qualquer busca. Em vez de disparar queries direto, constrói um <em>plano de retrieval</em> — definindo sequência, fontes prioritárias, critérios de suficiência e limites de custo.</p>
+
+    <div class="diagram">
+      <div class="flow" style="flex-direction:column; align-items:center; gap:4px;">
+        <div class="flow-box orange">Query</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box purple">Planning Module — constrói plano de busca</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box">Retrieval Strategy — sequência e prioridades</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box">Multi-step Retrieval — execução do plano</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box purple">Aggregation</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box accent">LLM</div>
+      </div>
+    </div>
+
+    <p>Habilita <strong>recuperação adaptativa e otimização de custos</strong> — o sistema sabe de antemão quanto vai gastar em tokens e chamadas. Complexidade: <strong>Alta</strong> — requer query planning e retrieval policies bem definidas.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon">🎯</span>
+        <h5>Aplicações</h5>
+        <p>Inteligência estratégica corporativa, sistemas de pesquisa científica com orçamento de chamadas controlado.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔬</span>
+        <h5>Interesse de Mercado</h5>
+        <p>Google DeepMind · Anthropic — pesquisa em eficiência de sistemas RAG em escala.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ═══════════ SEÇÃO 17 — MAPA VISUAL ═══════════ -->
+  <section class="section" id="s17">
+    <div class="section-header">
+      <div class="section-num purple">13</div>
+      <div class="section-header-text">
+        <h2>Mapa Visual — Arquitetura RAG Nível Engenharia</h2>
+        <div class="subtitle">A arquitetura usada em produtos SaaS e agentes corporativos</div>
+      </div>
+    </div>
+
+    <p>Este mapa representa a arquitetura completa de um sistema RAG de produção — o que realmente roda em produtos SaaS e agentes corporativos. Cada camada resolve um problema específico e se conecta às demais com responsabilidades bem definidas.</p>
+
+    <div class="diagram" style="padding: 32px 24px;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:0; font-family:'DM Mono',monospace; font-size:12px; max-width:520px; margin:0 auto;">
+
+        <div style="background:rgba(245,166,35,.12); border:1px solid rgba(245,166,35,.35); color:var(--accent3); padding:10px 32px; border-radius:8px; font-weight:600; letter-spacing:1px;">USER QUERY</div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:10px 24px; border-radius:8px; text-align:center; width:100%;">
+          <div style="font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">Query Understanding</div>
+          <div style="color:var(--muted); font-size:11px;">intent + entity extraction</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:10px 24px; border-radius:8px; text-align:center; width:100%;">
+          <div style="font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">Query Transformation</div>
+          <div style="color:var(--muted); font-size:11px;">rewrite · multi-query · HyDE</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:rgba(124,106,245,.1); border:1px solid rgba(124,106,245,.3); color:var(--accent2); padding:10px 24px; border-radius:8px; text-align:center; width:100%;">
+          <div style="font-size:10px; text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">Retrieval Planning</div>
+          <div style="color:var(--muted); font-size:11px;">agent decides strategy</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="display:flex; gap:12px; width:100%;">
+          <div style="flex:1; background:rgba(74,240,176,.07); border:1px solid rgba(74,240,176,.25); color:var(--accent); padding:10px 8px; border-radius:8px; text-align:center;">
+            <div style="font-size:10px; text-transform:uppercase; letter-spacing:1px; margin-bottom:3px;">Vector Search</div>
+            <div style="color:var(--muted); font-size:10px;">embeddings</div>
+          </div>
+          <div style="flex:1; background:rgba(124,106,245,.07); border:1px solid rgba(124,106,245,.25); color:var(--accent2); padding:10px 8px; border-radius:8px; text-align:center;">
+            <div style="font-size:10px; text-transform:uppercase; letter-spacing:1px; margin-bottom:3px;">Graph Search</div>
+            <div style="color:var(--muted); font-size:10px;">knowledge</div>
+          </div>
+          <div style="flex:1; background:rgba(245,166,35,.07); border:1px solid rgba(245,166,35,.25); color:var(--accent3); padding:10px 8px; border-radius:8px; text-align:center;">
+            <div style="font-size:10px; text-transform:uppercase; letter-spacing:1px; margin-bottom:3px;">API / Data</div>
+            <div style="color:var(--muted); font-size:10px;">tools</div>
+          </div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:rgba(124,106,245,.1); border:1px solid rgba(124,106,245,.3); color:var(--accent2); padding:10px 24px; border-radius:8px; text-align:center; width:100%;">
+          <div style="font-size:10px; text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">Fusion Layer</div>
+          <div style="color:var(--muted); font-size:11px;">RRF · score merging</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:10px 24px; border-radius:8px; text-align:center; width:100%;">
+          <div style="font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">Reranking</div>
+          <div style="color:var(--muted); font-size:11px;">cross-encoder · LLM reranker</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:10px 24px; border-radius:8px; text-align:center; width:100%;">
+          <div style="font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">Context Builder</div>
+          <div style="color:var(--muted); font-size:11px;">chunk selection · compression</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:rgba(245,166,35,.1); border:1px solid rgba(245,166,35,.3); color:var(--accent3); padding:10px 24px; border-radius:8px; text-align:center; width:100%;">
+          <div style="font-size:10px; text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">Memory</div>
+          <div style="color:var(--muted); font-size:11px;">user context · long-term state</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:rgba(124,106,245,.15); border:2px solid rgba(124,106,245,.5); color:var(--accent2); padding:12px 32px; border-radius:8px; text-align:center; width:100%; font-weight:700; letter-spacing:1px;">
+          <div style="font-size:10px; text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">LLM</div>
+          <div style="color:var(--muted); font-size:11px; font-weight:400;">reasoning + answer generation</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:10px 24px; border-radius:8px; text-align:center; width:100%;">
+          <div style="font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">Post-Processing Layer</div>
+          <div style="color:var(--muted); font-size:11px;">verification · citations · tools</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:rgba(74,240,176,.12); border:2px solid rgba(74,240,176,.4); color:var(--accent); padding:12px 32px; border-radius:8px; font-weight:700; letter-spacing:1px;">RESPONSE</div>
+      </div>
+    </div>
+
+    <p>Cada camada deste mapa corresponde a um componente que pode ser implementado, testado e otimizado independentemente. A modularidade é intencional — permite evoluir o sistema incrementalmente sem reescrever o pipeline inteiro.</p>
+
+    <div class="callout info">
+      <div class="callout-title">🗺️ Como ler este mapa</div>
+      <p>As camadas em <strong style="color:var(--accent)">verde</strong> são o core de recuperação. As em <strong style="color:var(--accent2)">roxo</strong> são inteligência e planejamento. As em <strong style="color:var(--accent3)">laranja</strong> são estado e persistência. A separação de cores reflete responsabilidades arquiteturais distintas.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEÇÃO 18 — STACK TECNOLÓGICO ═══════════ -->
+  <section class="section" id="s18">
+    <div class="section-header">
+      <div class="section-num purple">14</div>
+      <div class="section-header-text">
+        <h2>Stack Tecnológico de um RAG Moderno</h2>
+        <div class="subtitle">As ferramentas que compõem um sistema de produção</div>
+      </div>
+    </div>
+
+    <p>Um sistema RAG de produção não é um único produto — é uma composição de ferramentas especializadas, cada uma dominando sua camada. Conhecer o ecossistema é tão importante quanto conhecer a arquitetura.</p>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:28px 0;">
+
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px;">
+        <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:14px;">LLM — Generator</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <span class="tag">GPT-4 / GPT-4o</span>
+          <span class="tag">Claude 3.5 / 4</span>
+          <span class="tag">Gemini 1.5 Pro</span>
+          <span class="tag">Llama 3.1</span>
+          <span class="tag">Mistral Large</span>
+        </div>
+      </div>
+
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px;">
+        <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:14px;">Vector Database</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <span class="tag">Pinecone</span>
+          <span class="tag">Qdrant</span>
+          <span class="tag">Weaviate</span>
+          <span class="tag">Chroma</span>
+          <span class="tag">pgvector</span>
+          <span class="tag">Milvus</span>
+        </div>
+      </div>
+
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px;">
+        <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--accent2); text-transform:uppercase; letter-spacing:2px; margin-bottom:14px;">Frameworks RAG</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <span class="tag purple">LangChain</span>
+          <span class="tag purple">LangGraph</span>
+          <span class="tag purple">LlamaIndex</span>
+          <span class="tag purple">Haystack</span>
+          <span class="tag purple">DSPy</span>
+        </div>
+      </div>
+
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px;">
+        <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--accent2); text-transform:uppercase; letter-spacing:2px; margin-bottom:14px;">Knowledge Graph</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <span class="tag purple">Neo4j</span>
+          <span class="tag purple">Amazon Neptune</span>
+          <span class="tag purple">TigerGraph</span>
+          <span class="tag purple">Nebula Graph</span>
+        </div>
+      </div>
+
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px;">
+        <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--accent3); text-transform:uppercase; letter-spacing:2px; margin-bottom:14px;">Reranking</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <span class="tag orange">Cohere Rerank</span>
+          <span class="tag orange">Jina Reranker</span>
+          <span class="tag orange">BGE Reranker</span>
+          <span class="tag orange">FlashRank</span>
+        </div>
+      </div>
+
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px;">
+        <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--accent3); text-transform:uppercase; letter-spacing:2px; margin-bottom:14px;">Avaliação e Observabilidade</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <span class="tag orange">RAGAS</span>
+          <span class="tag orange">TruLens</span>
+          <span class="tag orange">DeepEval</span>
+          <span class="tag orange">LangSmith</span>
+          <span class="tag orange">Arize</span>
+        </div>
+      </div>
+
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px;">
+        <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:14px;">Embedding Models</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <span class="tag">text-embedding-3</span>
+          <span class="tag">BGE-M3</span>
+          <span class="tag">E5-Mistral</span>
+          <span class="tag">Cohere Embed v3</span>
+        </div>
+      </div>
+
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px;">
+        <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:14px;">Agentes e Orquestração</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <span class="tag">CrewAI</span>
+          <span class="tag">AutoGen</span>
+          <span class="tag">OpenAI Assistants</span>
+          <span class="tag">Semantic Kernel</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">🧩 Critério de Escolha</div>
+      <p>A seleção do stack não é técnica apenas — é estratégica. <strong>Latência vs. precisão</strong> (vector db choice), <strong>custo vs. qualidade</strong> (LLM choice), <strong>flexibilidade vs. maturidade</strong> (framework choice). Cada decisão tem trade-offs que afetam o produto final.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEÇÃO s19 — 12 TÉCNICAS ═══════════ -->
+  <section class="section" id="s-12tec">
+    <div class="section-header">
+      <div class="section-num purple">15</div>
+      <div class="section-header-text">
+        <h2>As 12 Técnicas que Tornam RAG Realmente Preciso</h2>
+        <div class="subtitle">O que separa um RAG funcional de um RAG de produção</div>
+      </div>
+    </div>
+
+    <p>RAG simples falha em produção por uma razão direta: <em>retrieval ruim gera contexto errado, que gera alucinação</em>. As 12 técnicas abaixo surgiram para resolver camadas específicas desse problema — cada uma atacando um ponto de falha concreto do pipeline.</p>
+
+    <div class="callout info">
+      <div class="callout-title">💡 Como ler esta seção</div>
+      <p>As técnicas P01–P04 atuam na <strong>indexação</strong>. P05–P09 na <strong>recuperação</strong>. P10–P12 na <strong>otimização de custo e precisão</strong>. Elas são complementares — sistemas de produção combinam várias simultaneamente.</p>
+    </div>
+
+    <!-- P01 -->
+    <h3 id="p01">P01 · RAPTOR — Recursive Abstractive Processing for Tree-Organized Retrieval</h3>
+    <p>RAG convencional recupera chunks isolados — o que falha quando a pergunta exige <em>contexto global</em> ou síntese de múltiplos documentos. RAPTOR resolve isso construindo uma <strong>árvore hierárquica de conhecimento</strong> durante a indexação.</p>
+
+    <div class="diagram">
+      <div class="flow" style="flex-direction:column; align-items:center; gap:4px; font-family:'DM Mono',monospace; font-size:12px;">
+        <div class="flow-box orange">Document</div>
+        <div style="color:var(--muted)">↓</div>
+        <div style="display:flex; gap:10px;">
+          <div class="flow-box">Chunk A</div>
+          <div class="flow-box">Chunk B</div>
+          <div class="flow-box">Chunk C</div>
+        </div>
+        <div style="color:var(--muted)">↓ Cluster + Summarize</div>
+        <div class="flow-box purple">Summary Layer 1</div>
+        <div style="color:var(--muted)">↓ Cluster + Summarize</div>
+        <div class="flow-box accent">Meta-Summary (topo da árvore)</div>
+      </div>
+    </div>
+
+    <p>Durante a busca, o sistema pode recuperar no <strong>nível detalhado</strong> (chunk original), <strong>nível resumido</strong> (cluster summary) ou <strong>nível conceitual</strong> (meta-summary) — dependendo da natureza da query. Ideal para análise científica, bases jurídicas e inteligência corporativa com documentos longos e interconectados.</p>
+
+    <!-- P02 -->
+    <h3 id="p02">P02 · ColBERT Retrieval — Token-Level Precision</h3>
+    <p>Modelos de embedding padrão geram <em>um único vetor por documento</em> — uma compressão que perde detalhes semânticos finos. ColBERT opera em <strong>nível de token</strong>: cada token da query é comparado com cada token do documento, e o score final agrega as melhores correspondências.</p>
+
+    <div class="formula">
+      Score(q, d) = Σ<sub>i∈q</sub> max<sub>j∈d</sub> sim(token_q<sub>i</sub>, token_d<sub>j</sub>)
+    </div>
+
+    <p>Isso melhora drasticamente buscas semânticas finas — especialmente em domínios técnicos onde a posição e combinação específica de termos importa. Usado em search engines de IA, copilots corporativos e sistemas jurídicos de alta precisão.</p>
+
+    <!-- P03 -->
+    <h3 id="p03">P03 · Parent-Child Chunking — Precisão sem Perda de Contexto</h3>
+    <p>O trade-off clássico do chunking: <em>chunks pequenos têm alta precisão de busca mas pouco contexto; chunks grandes têm contexto rico mas baixa precisão</em>. Parent-Child resolve isso com uma estrutura em dois níveis.</p>
+
+    <div class="diagram">
+      <div style="font-family:'DM Mono',monospace; font-size:12px; padding:8px 0;">
+        <div class="flow-box orange" style="margin-bottom:10px; text-align:center;">Parent Document (1000 tokens) — indexado mas não retornado diretamente</div>
+        <div style="display:flex; gap:10px; justify-content:center;">
+          <div class="flow-box accent">Child Chunk 1 (200t)</div>
+          <div class="flow-box accent">Child Chunk 2 (200t)</div>
+          <div class="flow-box accent">Child Chunk 3 (200t)</div>
+        </div>
+      </div>
+    </div>
+
+    <p>O retriever busca nos <strong>child chunks</strong> (precisão alta). Ao encontrar um match, recupera o <strong>parent document</strong> completo para enviar ao LLM (contexto rico). Resultado: precisão de chunk pequeno + contexto de chunk grande — simultaneamente. Uma das técnicas mais adotadas em sistemas RAG de produção.</p>
+
+    <!-- P04 -->
+    <h3 id="p04">P04 · Semantic Chunking — Fragmentação por Significado</h3>
+    <p>Em vez de dividir documentos por número fixo de tokens, Semantic Chunking detecta <strong>mudanças semânticas</strong> no texto — transições de tópico, de argumento ou de seção — e cria chunks nas fronteiras naturais do conteúdo.</p>
+    <ul>
+      <li>Reduz contexto irrelevante dentro de um chunk (maior signal-to-noise)</li>
+      <li>Aumenta recall — chunks semanticamente coesos rankeiam melhor</li>
+      <li>Implementado via embeddings de sentenças consecutivas com threshold de similaridade</li>
+    </ul>
+
+    <!-- P05 -->
+    <h3 id="p05">P05 · Hybrid Retrieval — Dense + Sparse</h3>
+    <p>Embeddings densos ignoram termos exatos — códigos, números, IDs, nomes próprios, cláusulas legais específicas. BM25 (busca léxica) ignora paráfrase e contexto semântico. A combinação dos dois cobre os pontos cegos de cada um. Coberto em profundidade na <a href="#s9" style="color:var(--accent)">Seção 09 — Hybrid RAG</a>.</p>
+
+    <!-- P06 -->
+    <h3 id="p06">P06 · Reranking — Precisão Pós-Retrieval</h3>
+    <p>O retriever inicial recupera os top-50 candidatos por velocidade. Um <strong>cross-encoder</strong> (modelo que avalia query + documento juntos, não separadamente) reordena esses candidatos por relevância real, selecionando os top-5 para enviar ao LLM.</p>
+
+    <div class="callout tip">
+      <div class="callout-title">📈 Impacto Mensurável</div>
+      <p>Reranking tipicamente adiciona <strong>+20–40% de precisão</strong> no contexto enviado ao LLM com custo computacional baixo — é uma das técnicas de maior ROI em sistemas RAG. Modelos: Cohere Rerank, Jina Reranker, BGE Reranker.</p>
+    </div>
+
+    <!-- P07 -->
+    <h3 id="p07">P07 · Query Rewriting — Reformulação para Retrieval Otimizado</h3>
+    <p>A query do usuário é otimizada para busca antes de chegar ao retriever. O LLM reescreve expandindo termos, resolvendo ambiguidades e adaptando o estilo ao vocabulário dos documentos indexados.</p>
+    <div class="callout tip">
+      <div class="callout-title">📐 Exemplo</div>
+      <p><em>Input do usuário:</em> "impacto IA varejo"<br>
+      <em>Query reescrita:</em> "impact of artificial intelligence on retail sector: automation, customer experience, inventory optimization trends 2023–2025"</p>
+    </div>
+
+    <!-- P08 -->
+    <h3 id="p08">P08 · RAG-Fusion — Multi-Query com Rank Fusion</h3>
+    <p>Gera múltiplas variações da query (Q1–Q4), executa retrieval paralelo para cada uma e combina os rankings via <strong>Reciprocal Rank Fusion</strong>. Maximiza recall capturando documentos relevantes que uma única query perderia. Coberto em profundidade na <a href="#s10" style="color:var(--accent)">Seção 10 — RAG-Fusion</a>.</p>
+
+    <!-- P09 -->
+    <h3 id="p09">P09 · HyDE — Hypothetical Document Embedding</h3>
+    <p>Gera um documento hipotético que <em>responderia</em> à query antes de buscar, usando seu embedding para o retrieval. Fecha o gap semântico entre perguntas curtas e documentos técnicos longos. Coberto em profundidade na <a href="#s11" style="color:var(--accent)">Seção 11 — HyDE</a>.</p>
+
+    <!-- P10 -->
+    <h3 id="p10">P10 · Metadata Filtering — Retrieval com Filtros Estruturados</h3>
+    <p>Cada chunk é indexado com metadados estruturados que permitem filtros precisos <em>antes</em> da busca semântica — reduzindo o espaço de busca e aumentando a relevância dos resultados.</p>
+    <div class="diagram">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-family:'DM Mono',monospace; font-size:12px;">
+        <div style="padding:14px; background:var(--surface2); border:1px solid var(--border); border-radius:8px;">
+          <div style="color:var(--accent); margin-bottom:8px;">Metadata por Chunk</div>
+          <div style="color:var(--muted);">source: "legal"<br>date: 2024-03<br>author: "equipe_juridica"<br>domain: "contratos"<br>doc_type: "policy"</div>
+        </div>
+        <div style="padding:14px; background:var(--surface2); border:1px solid var(--border); border-radius:8px;">
+          <div style="color:var(--accent2); margin-bottom:8px;">Filtro na Query</div>
+          <div style="color:var(--muted);">source = "legal"<br>year &gt; 2022<br>domain = "contratos"<br><br>→ busca apenas nos<br>chunks relevantes</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- P11 -->
+    <h3 id="p11">P11 · Context Compression — Síntese Antes da Geração</h3>
+    <p>Quando muitos documentos são recuperados, um LLM leve <strong>comprime e resume</strong> o contexto antes de enviá-lo ao modelo principal — eliminando informação redundante e mantendo apenas o que é diretamente relevante para a query.</p>
+
+    <div class="diagram">
+      <div class="flow" style="flex-direction:column; align-items:center; gap:4px;">
+        <div class="flow-box orange">20 docs recuperados</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box purple">LLM compressor — remove redundância</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box accent">Top context comprimido → LLM principal</div>
+      </div>
+    </div>
+
+    <!-- P12 -->
+    <h3 id="p12">P12 · Semantic Cache — Eficiência em Escala</h3>
+    <p>Em SaaS com alto volume, perguntas semanticamente similares são recorrentes. Semantic Cache armazena respostas anteriores indexadas por embedding — quando uma nova query tem similaridade acima do threshold com uma cached, retorna a resposta armazenada sem invocar o pipeline completo.</p>
+
+    <div class="diagram">
+      <div class="flow" style="flex-direction:column; align-items:center; gap:4px;">
+        <div class="flow-box orange">Nova Query</div>
+        <div style="color:var(--muted)">↓</div>
+        <div class="flow-box">Embed → similaridade com cache</div>
+        <div style="color:var(--muted)">↓</div>
+        <div style="display:flex; gap:16px;">
+          <div class="flow-box accent">sim &gt; 0.95 → resposta cacheada</div>
+          <div class="flow-box purple">sim &lt; 0.95 → pipeline completo</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">💰 Impacto em Produção</div>
+      <p>Semantic Cache reduz <strong>latência em 80–95%</strong> e <strong>custo de tokens em 40–60%</strong> em aplicações SaaS com padrões de uso recorrentes — especialmente em suporte ao cliente, onboarding e FAQ corporativo.</p>
+    </div>
+
+  </section>
+
+  <!-- ═══════════ SEÇÃO s20 — STARTUPS AI ═══════════ -->
+  <section class="section" id="s19">
+    <div class="section-header">
+      <div class="section-num purple">16</div>
+      <div class="section-header-text">
+        <h2>Arquitetura das Startups de AI que Levantam Milhões</h2>
+        <div class="subtitle">AI Knowledge Platforms — o padrão arquitetural de 2024–2026</div>
+      </div>
+    </div>
+
+    <p>As startups de AI que estão captando rodadas expressivas em 2024–2026 não vendem apenas um chatbot com RAG — vendem <strong>AI Knowledge Platforms</strong>: infraestrutura cognitiva que integra retrieval, agência, memória e raciocínio em um sistema coeso e escalável.</p>
+
+    <h3>Pipeline Completo da Plataforma</h3>
+
+    <div class="diagram" style="padding:32px 24px;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:0; font-family:'DM Mono',monospace; font-size:12px; max-width:480px; margin:0 auto;">
+
+        <div style="background:rgba(245,166,35,.12); border:1px solid rgba(245,166,35,.35); color:var(--accent3); padding:10px 32px; border-radius:8px; font-weight:600;">USER</div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:10px 24px; border-radius:8px; text-align:center; width:100%;">
+          <div style="font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">API Gateway</div>
+          <div style="color:var(--muted); font-size:11px;">auth · rate limiting · routing</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:10px 24px; border-radius:8px; text-align:center; width:100%;">
+          <div style="font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">Query Understanding</div>
+          <div style="color:var(--muted); font-size:11px;">intent · entities · language</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:rgba(124,106,245,.1); border:1px solid rgba(124,106,245,.3); color:var(--accent2); padding:10px 24px; border-radius:8px; text-align:center; width:100%;">
+          <div style="font-size:10px; text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">Intent Router</div>
+          <div style="color:var(--muted); font-size:11px;">classifica e direciona a query</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:rgba(124,106,245,.1); border:1px solid rgba(124,106,245,.3); color:var(--accent2); padding:10px 24px; border-radius:8px; text-align:center; width:100%;">
+          <div style="font-size:10px; text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">Agent Planner</div>
+          <div style="color:var(--muted); font-size:11px;">decide estratégia de recuperação</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="display:flex; gap:10px; width:100%;">
+          <div style="flex:1; background:rgba(74,240,176,.07); border:1px solid rgba(74,240,176,.25); color:var(--accent); padding:10px 6px; border-radius:8px; text-align:center;">
+            <div style="font-size:9px; text-transform:uppercase; letter-spacing:1px; margin-bottom:3px;">Vector DB</div>
+          </div>
+          <div style="flex:1; background:rgba(74,240,176,.07); border:1px solid rgba(74,240,176,.25); color:var(--accent); padding:10px 6px; border-radius:8px; text-align:center;">
+            <div style="font-size:9px; text-transform:uppercase; letter-spacing:1px; margin-bottom:3px;">Hybrid Search</div>
+          </div>
+          <div style="flex:1; background:rgba(124,106,245,.07); border:1px solid rgba(124,106,245,.25); color:var(--accent2); padding:10px 6px; border-radius:8px; text-align:center;">
+            <div style="font-size:9px; text-transform:uppercase; letter-spacing:1px; margin-bottom:3px;">Knowledge Graph</div>
+          </div>
+          <div style="flex:1; background:rgba(245,166,35,.07); border:1px solid rgba(245,166,35,.25); color:var(--accent3); padding:10px 6px; border-radius:8px; text-align:center;">
+            <div style="font-size:9px; text-transform:uppercase; letter-spacing:1px; margin-bottom:3px;">External APIs</div>
+          </div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:10px 24px; border-radius:8px; text-align:center; width:100%;">
+          <div style="font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">Reranking</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:10px 24px; border-radius:8px; text-align:center; width:100%;">
+          <div style="font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">Context Builder</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:rgba(245,166,35,.1); border:1px solid rgba(245,166,35,.3); color:var(--accent3); padding:10px 24px; border-radius:8px; text-align:center; width:100%;">
+          <div style="font-size:10px; text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">Memory</div>
+          <div style="color:var(--muted); font-size:11px;">user state · conversation · long-term</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:rgba(124,106,245,.15); border:2px solid rgba(124,106,245,.5); color:var(--accent2); padding:12px 32px; border-radius:8px; text-align:center; width:100%; font-weight:700;">
+          <div style="font-size:10px; text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">LLM Reasoning</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:10px 24px; border-radius:8px; text-align:center; width:100%;">
+          <div style="font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:3px;">Verification Layer</div>
+          <div style="color:var(--muted); font-size:11px;">hallucination check · citations</div>
+        </div>
+        <div style="color:var(--muted); margin:2px 0;">│</div>
+
+        <div style="background:rgba(74,240,176,.12); border:2px solid rgba(74,240,176,.4); color:var(--accent); padding:12px 32px; border-radius:8px; font-weight:700;">RESPONSE</div>
+      </div>
+    </div>
+
+    <h3>Stack de Infraestrutura</h3>
+    <p>Além do stack de IA (LLMs, vector stores, frameworks), as plataformas de produção adicionam uma camada de infraestrutura que garante escala, confiabilidade e observabilidade:</p>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin:20px 0;">
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px;">
+        <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:10px;">Orquestração</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          <span class="tag">Kubernetes</span>
+          <span class="tag">Docker</span>
+          <span class="tag">Ray</span>
+        </div>
+      </div>
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px;">
+        <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:10px;">Cache e Filas</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          <span class="tag">Redis</span>
+          <span class="tag">Kafka</span>
+          <span class="tag">RabbitMQ</span>
+        </div>
+      </div>
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px;">
+        <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:10px;">Observabilidade</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          <span class="tag">LangSmith</span>
+          <span class="tag">Arize</span>
+          <span class="tag">Prometheus</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-title">🚀 O Diferencial Competitivo</div>
+      <p>O que distingue uma startup de AI que levanta Series A da que fecha em 12 meses não é o LLM — é a <strong>qualidade do pipeline de retrieval</strong>, a robustez da camada de memória e a capacidade de escalar com custo controlado. Técnicas como Semantic Cache, Parent-Child Chunking e Reranking são o moat técnico real.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEÇÃO s20 — BLUEPRINT AGENTIC RAG ═══════════ -->
+  <section class="section" id="s20">
+    <div class="section-header">
+      <div class="section-num purple">17</div>
+      <div class="section-header-text">
+        <h2>Blueprint: Agentic RAG Nível SaaS</h2>
+        <div class="subtitle">As 10 etapas para construir um sistema RAG autônomo de produção</div>
+      </div>
+    </div>
+
+    <p>Este blueprint descreve a sequência completa de construção de um Agentic RAG pronto para produto — desde a ingestão de dados até a camada de avaliação contínua. Cada etapa tem responsabilidade clara, ferramentas recomendadas e decisões de design explícitas.</p>
+
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent)">01</div>
+        <div class="pipeline-step-body">
+          <h4>Ingestão de Conhecimento</h4>
+          <p>Pipeline de entrada: <code>documentos → parser → chunking → metadata → embeddings → vector database</code>. Ferramentas: LangChain Document Loaders, LlamaIndex Readers, Unstructured.io para PDFs e formatos complexos. Decisão crítica: estratégia de chunking (fixo, semântico ou parent-child).</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent)">02</div>
+        <div class="pipeline-step-body">
+          <h4>Indexação Avançada</h4>
+          <p>Aplicar <strong>Semantic Chunking</strong> para fragmentação inteligente, <strong>Parent-Child Retrieval</strong> para preservar contexto e <strong>Hybrid Search</strong> para cobertura completa. Cada chunk recebe metadados estruturados (fonte, data, domínio, tipo) para filtros precisos em produção.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent)">03</div>
+        <div class="pipeline-step-body">
+          <h4>Query Pipeline</h4>
+          <p>Sequência: <code>Intent Classification → Query Rewrite → HyDE generation → Multi-query retrieval</code>. O LLM classifica o tipo de query (factual, analítica, conversacional) antes de decidir qual estratégia de reescrita aplicar — evitando overhead desnecessário em queries simples.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent)">04</div>
+        <div class="pipeline-step-body">
+          <h4>Retrieval Multi-fonte</h4>
+          <p>Execução paralela de <strong>Vector Search</strong> (semântico), <strong>Keyword Search / BM25</strong> (léxico) e <strong>Graph Search</strong> (relacional, quando aplicável). Os resultados convergem para a Fusion Layer via Reciprocal Rank Fusion antes do reranking.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent)">05</div>
+        <div class="pipeline-step-body">
+          <h4>Reranking</h4>
+          <p>Cross-encoder avalia relevância real de cada candidato em relação à query. Modelos recomendados: <strong>Cohere Rerank v3</strong> (multilíngue, produção) ou <strong>BGE Reranker</strong> (open-source, self-hosted). Seleciona top-k para o Context Builder.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent)">06</div>
+        <div class="pipeline-step-body">
+          <h4>Agent Reasoning</h4>
+          <p>O agente avalia o contexto recuperado e decide: <em>buscar novamente? acionar ferramenta? responder direto?</em> Implementado via <strong>LangGraph</strong> (grafos de estado com ciclos) ou <strong>CrewAI</strong> (multi-agent). O loop de raciocínio tem limite de iterações para evitar loops infinitos.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent)">07</div>
+        <div class="pipeline-step-body">
+          <h4>Tool Layer</h4>
+          <p>Ferramentas disponíveis para o agente: APIs externas, databases SQL/NoSQL, web search, calculators, code interpreter. Cada ferramenta tem descrição semântica precisa para que o agente faça seleção correta. Tool registry com permission layer controla acesso por usuário e contexto.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent)">08</div>
+        <div class="pipeline-step-body">
+          <h4>Memory Layer</h4>
+          <p>Três tipos de memória em produção: <strong>Conversation Memory</strong> (histórico da sessão), <strong>User Memory</strong> (perfil e preferências persistentes via mem0 ou similar), <strong>Task Memory</strong> (estado de tarefas em andamento). A memória é injetada no contexto de forma seletiva para não ultrapassar o limite de tokens.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent)">09</div>
+        <div class="pipeline-step-body">
+          <h4>Response Generation</h4>
+          <p>O LLM recebe o prompt montado com: contexto rerankeado, resultados de ferramentas, memória relevante e a query original. O system prompt define tom, formato e instruções de citação de fontes. Temperature baixa (0–0.2) para respostas factuais; mais alta para geração criativa.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent)">10</div>
+        <div class="pipeline-step-body">
+          <h4>Evaluation Layer</h4>
+          <p>Camada contínua de qualidade: <strong>Hallucination Detection</strong> (verifica se cada claim tem suporte no contexto), <strong>Citation Verification</strong> (valida fontes citadas), <strong>Confidence Score</strong> (score de confiança da resposta). Frameworks: RAGAS, TruLens, DeepEval. Métricas registradas para observabilidade e melhoria contínua.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-title">🗺️ Sequência de Implementação Recomendada</div>
+      <p>Não implemente tudo de uma vez. Comece com etapas 01–04 (MVP funcional), adicione 05–06 quando a qualidade do retrieval estiver estabilizada, e introduza 07–10 conforme o produto escala. Cada etapa adicional tem custo de complexidade — só vale quando o problema que resolve é real no seu caso.</p>
+    </div>
+  </section>
+
   <!-- ═══════════ SEÇÃO 12 ═══════════ -->
   <section class="section" id="s12">
     <div class="section-header">
-      <div class="section-num">12</div>
+      <div class="section-num">18</div>
       <div class="section-header-text">
         <h2>Comparativo Geral</h2>
         <div class="subtitle">Todas as arquiteturas lado a lado</div>
@@ -1929,7 +2907,7 @@ hyde_vectorstore = <span class="cls">Chroma</span>(embedding_function=hyde_embed
   <!-- ═══════════ SEÇÃO 13 ═══════════ -->
   <section class="section" id="s13">
     <div class="section-header">
-      <div class="section-num">13</div>
+      <div class="section-num">19</div>
       <div class="section-header-text">
         <h2>Quando Usar Qual</h2>
         <div class="subtitle">Guia de decisão para aplicações reais</div>
@@ -2040,9 +3018,476 @@ hyde_vectorstore = <span class="cls">Chroma</span>(embedding_function=hyde_embed
     </div>
   </section>
 
+  <!-- ═══════════ SEÇÃO 14 ═══════════ -->
+  <section class="section" id="s14">
+    <div class="section-header">
+      <div class="section-num">T1</div>
+      <div class="section-header-text">
+        <h2>Arquitetura Moderna de RAG</h2>
+        <div class="subtitle">O estado da arte em sistemas de produção</div>
+      </div>
+    </div>
+
+    <p>O pipeline de três fases — Ingestion, Retriever e Generator — é o ponto de partida, não o estado da arte. Os sistemas RAG de produção em 2024–2025 combinam múltiplas camadas de inteligência antes e depois da recuperação, resultando em uma arquitetura significativamente mais robusta e precisa.</p>
+
+    <h3>A Stack Moderna</h3>
+    <p>Os sistemas mais avançados não escolhem uma única variante de RAG — eles as compõem em camadas complementares, cada uma resolvendo uma limitação específica:</p>
+
+    <div class="diagram">
+      <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:10px;">
+        <div class="flow-box accent" style="padding:12px 20px; text-align:center;">
+          <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:4px;">RECUPERAÇÃO</div>
+          Hybrid Search
+        </div>
+        <span class="flow-arrow" style="font-size:22px; color:var(--accent);">+</span>
+        <div class="flow-box purple" style="padding:12px 20px; text-align:center;">
+          <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:4px;">FUSÃO</div>
+          RAG-Fusion
+        </div>
+        <span class="flow-arrow" style="font-size:22px; color:var(--accent2);">+</span>
+        <div class="flow-box purple" style="padding:12px 20px; text-align:center;">
+          <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:4px;">AGÊNCIA</div>
+          Agentic RAG
+        </div>
+        <span class="flow-arrow" style="font-size:22px; color:var(--accent2);">+</span>
+        <div class="flow-box orange" style="padding:12px 20px; text-align:center;">
+          <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:4px;">PERSISTÊNCIA</div>
+          Memory
+        </div>
+        <span class="flow-arrow" style="font-size:22px; color:var(--accent3);">+</span>
+        <div class="flow-box orange" style="padding:12px 20px; text-align:center;">
+          <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:4px;">RELAÇÕES</div>
+          GraphRAG
+        </div>
+      </div>
+    </div>
+
+    <h3>Pipeline de Execução Avançado</h3>
+    <p>A ordem das operações importa tanto quanto as operações em si. Em um sistema moderno, a query passa por estágios progressivos de refinamento antes de chegar ao LLM:</p>
+
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent)">01</div>
+        <div class="pipeline-step-body">
+          <h4>User Query</h4>
+          <p>Entrada bruta do usuário. Pode ser ambígua, incompleta ou semanticamente distante dos documentos da base. É o ponto de partida — não o que vai ao retriever.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent)">02</div>
+        <div class="pipeline-step-body">
+          <h4>Query Rewriting</h4>
+          <p>O LLM reformula a query original para maximizar a qualidade da recuperação. Expande termos, resolve referências ambíguas do histórico e gera variações complementares (base do RAG-Fusion).</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent)">03</div>
+        <div class="pipeline-step-body">
+          <h4>Multi Retrieval</h4>
+          <p>A query reescrita aciona múltiplos retrievers em paralelo: busca densa (vetorial semântica), busca esparsa (BM25 léxica) e, quando aplicável, travessia de grafo (GraphRAG). Volume máximo de evidências antes da filtragem.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent)">04</div>
+        <div class="pipeline-step-body">
+          <h4>Reranking</h4>
+          <p>Um modelo cross-encoder (Cohere Rerank, Jina, BGE) avalia cada chunk candidato em relação à query e reordena por relevância real — não por similaridade de vetor. Seleciona o <code>top-k</code> de maior precisão.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent)">05</div>
+        <div class="pipeline-step-body">
+          <h4>Context Assembly</h4>
+          <p>Os chunks rerankeados são organizados e enriquecidos com metadados (fonte, data, seção) antes de compor o prompt. Inclui memória do usuário e instruções de sistema. Objetivo: contexto mais informativo possível dentro do limite de tokens.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent)">06</div>
+        <div class="pipeline-step-body">
+          <h4>LLM — Generator</h4>
+          <p>Somente aqui o LLM é invocado. Com contexto limpo, relevante e bem estruturado, produz respostas fundamentadas em evidências reais — fidelidade alta, risco mínimo de alucinação.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-title">📐 Por que essa ordem importa</div>
+      <p><strong>Query Rewriting</strong> compensa a imprecisão humana · <strong>Multi Retrieval</strong> maximiza o recall · <strong>Reranking</strong> maximiza a precision · <strong>Context Assembly</strong> otimiza tokens · <strong>Generator</strong> só entra com contexto limpo. É uma cadeia de responsabilidades, não uma caixa-preta.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEÇÃO 15 ═══════════ -->
+  <section class="section" id="s15">
+    <div class="section-header">
+      <div class="section-num orange">T2</div>
+      <div class="section-header-text">
+        <h2>O Futuro: RAG + Agentes</h2>
+        <div class="subtitle">De sistemas reativos a colaboradores autônomos</div>
+      </div>
+    </div>
+
+    <p>A arquitetura moderna descrita na seção anterior ainda é essencialmente <em>reativa</em> — responde a uma query. A tendência dominante em 2025 é tornar esses sistemas <em>proativos e autônomos</em>, combinando RAG com agentes que planejam, executam e aprendem continuamente.</p>
+
+    <div class="diagram">
+      <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:10px;">
+        <div class="flow-box accent" style="padding:12px 20px; text-align:center;">
+          <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:4px;">CONHECIMENTO</div>
+          RAG
+        </div>
+        <span class="flow-arrow" style="font-size:22px; color:var(--accent);">+</span>
+        <div class="flow-box purple" style="padding:12px 20px; text-align:center;">
+          <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:4px;">AUTONOMIA</div>
+          Agents
+        </div>
+        <span class="flow-arrow" style="font-size:22px; color:var(--accent2);">+</span>
+        <div class="flow-box purple" style="padding:12px 20px; text-align:center;">
+          <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:4px;">AÇÃO</div>
+          Tools
+        </div>
+        <span class="flow-arrow" style="font-size:22px; color:var(--accent2);">+</span>
+        <div class="flow-box orange" style="padding:12px 20px; text-align:center;">
+          <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:4px;">CONTINUIDADE</div>
+          Memory
+        </div>
+      </div>
+      <p style="text-align:center; font-family:'DM Mono',monospace; font-size:12px; color:var(--accent); margin-top:16px; letter-spacing:1px;">→ SISTEMAS AUTÔNOMOS DE CONHECIMENTO ←</p>
+    </div>
+
+    <h3>Exemplo Aplicado: Agente de Inteligência Estratégica</h3>
+    <p>Um agente corporativo que opera de forma contínua e autônoma, sem intervenção humana em cada etapa:</p>
+
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent2)">01</div>
+        <div class="pipeline-step-body">
+          <h4>Coleta de Dados</h4>
+          <p>Monitora feeds de notícias, relatórios de mercado, APIs financeiras e publicações regulatórias — ingerindo novos documentos automaticamente na base RAG. Conhecimento sempre atualizado sem ação manual.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent2)">02</div>
+        <div class="pipeline-step-body">
+          <h4>Busca em Bases Internas</h4>
+          <p>Consulta documentos proprietários — estratégias, histórico de decisões, dados financeiros internos — via RAG sobre bases corporativas seguras. Combina contexto externo com inteligência interna.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent2)">03</div>
+        <div class="pipeline-step-body">
+          <h4>Análise de Mercado</h4>
+          <p>Cruza dados externos com conhecimento interno, identifica padrões, anomalias e oportunidades. Usa GraphRAG para mapear relações entre concorrentes, tendências e posicionamento da empresa.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent2)">04</div>
+        <div class="pipeline-step-body">
+          <h4>Geração de Relatórios</h4>
+          <p>Produz relatórios estruturados e sumários executivos de forma autônoma — com fontes citadas, datas e grau de confiança. Entregue no canal configurado (e-mail, Slack, plataforma interna).</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent2)">05</div>
+        <div class="pipeline-step-body">
+          <h4>Sugestão de Decisões</h4>
+          <p>Propõe ações concretas rankeadas por impacto e viabilidade, com justificativas rastreáveis. O humano mantém o poder de decisão final; o agente elimina o trabalho de síntese e diagnóstico.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">🔭 A Distinção que Define o Futuro</div>
+      <p>RAG sozinho responde perguntas. RAG + Agente + Tools + Memory <strong>resolve problemas de forma contínua</strong> — sem esperar ser perguntado. Essa é a diferença entre um assistente e um colaborador autônomo.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEÇÃO s21 — SAAS AGENTES RAG ═══════════ -->
+  <section class="section" id="s21">
+    <div class="section-header">
+      <div class="section-num orange">T3</div>
+      <div class="section-header-text">
+        <h2>Como Criar um SaaS de Agentes RAG com Alto Valuation</h2>
+        <div class="subtitle">AI Knowledge Platforms — arquitetura completa em 9 camadas</div>
+      </div>
+    </div>
+
+    <p>As startups de IA que captam rodadas expressivas não vendem apenas chat com RAG — constroem <strong>AI Knowledge Platforms</strong>: infraestrutura que permite empresas criar agentes de conhecimento especializados, capazes de ler documentos, consultar bases internas, usar APIs e apoiar decisões de forma autônoma.</p>
+
+    <div class="callout info">
+      <div class="callout-title">🎯 O Conceito de Produto</div>
+      <p>Um SaaS que permite empresas implantarem <strong>agentes de conhecimento especializados por domínio</strong> — jurídico, financeiro, saúde, pesquisa — com memória organizacional, integração com ferramentas corporativas e analytics de uso do conhecimento.</p>
+    </div>
+
+    <h3>Arquitetura em 9 Camadas</h3>
+
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent3)">C1</div>
+        <div class="pipeline-step-body">
+          <h4>Data Ingestion</h4>
+          <p>Conectores para todas as fontes corporativas: PDF, Notion, Google Docs, Slack, CRM, Databases, APIs. Pipeline: <code>data connectors → parsing → semantic chunking → metadata enrichment → embedding</code>. A qualidade da ingestão determina o teto de qualidade do sistema inteiro.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent3)">C2</div>
+        <div class="pipeline-step-body">
+          <h4>Knowledge Layer</h4>
+          <p>Armazenamento multi-modal: <strong>Vector Database</strong> (Pinecone, Weaviate) para busca semântica, <strong>Knowledge Graph</strong> (Neo4j) para relações entre entidades, <strong>Cache</strong> (Redis) para Semantic Cache e respostas frequentes.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent3)">C3</div>
+        <div class="pipeline-step-body">
+          <h4>Retrieval Engine</h4>
+          <p>Pipeline moderno completo: <code>query rewrite → multi-query retrieval → hybrid search → graph retrieval → reranking</code>. Cada etapa é configurável por domínio — um agente jurídico tem parâmetros de retrieval diferentes de um agente de suporte ao cliente.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent3)">C4</div>
+        <div class="pipeline-step-body">
+          <h4>Agent Engine — O Diferencial</h4>
+          <p>O agente decide em tempo real: <em>buscar mais dados? usar ferramenta? responder? delegar para outro agente?</em> Implementado via <strong>LangGraph</strong> ou <strong>CrewAI</strong>. É aqui que o produto entrega valor real — não no chat, mas na autonomia de raciocínio.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent3)">C5</div>
+        <div class="pipeline-step-body">
+          <h4>Tool Layer</h4>
+          <p>Arsenal de ferramentas disponíveis para os agentes: SQL queries, analytics, web search, CRM, email, calendar, automation. Cada ferramenta tem permissões configuráveis por workspace — garantindo segurança e compliance corporativo.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent3)">C6</div>
+        <div class="pipeline-step-body">
+          <h4>Memory</h4>
+          <p>Quatro tipos: <strong>conversation memory</strong> (sessão atual), <strong>user profile</strong> (preferências e histórico individual), <strong>task memory</strong> (estado de tarefas em andamento), <strong>organizational memory</strong> (conhecimento acumulado da empresa como entidade). O último é o moat de longo prazo — quanto mais a plataforma aprende sobre a organização, mais difícil é migrar.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent3)">C7</div>
+        <div class="pipeline-step-body">
+          <h4>LLM Reasoning</h4>
+          <p>Seleção de modelo por caso de uso — GPT-4o para raciocínio complexo, Claude para análise de documentos longos, Llama para workloads self-hosted com requisitos de privacidade. A abstração de modelo permite trocar o LLM sem refatorar o pipeline.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent3)">C8</div>
+        <div class="pipeline-step-body">
+          <h4>Evaluation Layer</h4>
+          <p>Sistema de verificação contínua: <strong>hallucination detection</strong> (cada claim tem suporte no contexto?), <strong>confidence score</strong> (grau de certeza da resposta), <strong>citation validation</strong> (fontes citadas são reais e acessíveis?). Essencial para confiança em ambientes regulados.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent3)">C9</div>
+        <div class="pipeline-step-body">
+          <h4>Interface SaaS</h4>
+          <p>Produto final: <strong>dashboard</strong> de gestão do conhecimento, <strong>agent builder</strong> sem código, <strong>analytics</strong> de uso e qualidade, <strong>workflow builder</strong> para automações, <strong>API access</strong> para integração com sistemas existentes.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Mercado e Diferenciais de Valuation</h3>
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon">🎯</span>
+        <h5>Mercados-alvo</h5>
+        <p>Escritórios jurídicos, consultorias, fintechs, saúde, pesquisa científica — qualquer setor onde conhecimento especializado é o principal ativo.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔒</span>
+        <h5>Agentes especializados por domínio</h5>
+        <p>Fine-tuning de retrieval e prompts por setor cria barreiras técnicas reais — o agente jurídico sabe o que um agente genérico não sabe.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔄</span>
+        <h5>Automação de workflows</h5>
+        <p>Quando o agente executa workflows completos — não apenas responde — o produto entra na categoria de automação de processos, com TAM muito maior.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🧠</span>
+        <h5>Marketplace de agentes</h5>
+        <p>Agentes pré-treinados por domínio como produto — modelo de distribuição que escala sem crescimento linear do time de engenharia.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEÇÃO s22 — 10 FALHAS ═══════════ -->
+  <section class="section" id="s22">
+    <div class="section-header">
+      <div class="section-num red">T4</div>
+      <div class="section-header-text">
+        <h2>As 10 Falhas que Fazem Projetos de RAG Falharem em Produção</h2>
+        <div class="subtitle">O diagnóstico do que realmente quebra sistemas RAG corporativos</div>
+      </div>
+    </div>
+
+    <p>A maioria das implementações falha porque RAG não é apenas "LLM + vector database" — é um <strong>sistema de engenharia de conhecimento distribuído</strong>. Cada ponto de falha abaixo tem um padrão recorrente em projetos corporativos e uma solução específica.</p>
+
+    <div class="callout danger">
+      <div class="callout-title">⚠️ Diagnóstico de Campo</div>
+      <p>Estas falhas aparecem repetidamente em projetos implementados com frameworks como LangChain e LlamaIndex. A maioria não é falta de tecnologia — é falta de compreensão das <strong>premissas de cada camada do pipeline</strong>.</p>
+    </div>
+
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent4)">F01</div>
+        <div class="pipeline-step-body">
+          <h4>Chunking Ruim</h4>
+          <p>O erro clássico: <code>chunk_size = 500</code> aplicado uniformemente em todos os documentos. Quebra contexto lógico, separa argumentos, mistura tópicos — resultando em retrieval impreciso desde a base. <strong>Solução:</strong> Semantic Chunking, Parent-Child Retrieval ou chunking por seção do documento.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent4)">F02</div>
+        <div class="pipeline-step-body">
+          <h4>Embeddings Inadequados ao Domínio</h4>
+          <p>Modelos de embedding treinados em dados gerais não capturam semântica especializada. Em medicina, direito ou engenharia, a similaridade vetorial de um modelo genérico é enganosa. <strong>Solução:</strong> Embeddings especializados ou fine-tuned para o domínio (ex: BioBERT para biomédico, Legal-BERT para jurídico).</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent4)">F03</div>
+        <div class="pipeline-step-body">
+          <h4>Retrieval Simples Demais</h4>
+          <p>Pipeline <code>query → vector search → top 5 → LLM</code> falha quando a query é ambígua, a pergunta exige múltiplos documentos ou a informação está distribuída. <strong>Solução:</strong> Pipeline moderno com query rewrite, multi-query retrieval, hybrid search e reranking em sequência.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent4)">F04</div>
+        <div class="pipeline-step-body">
+          <h4>Ausência de Reranking</h4>
+          <p>Vector search retorna <em>aproximação semântica</em>, não relevância real. Sem reranking, documentos medianamente relevantes aparecem no topo e o LLM trabalha com contexto subótimo. <strong>Solução:</strong> Cross-encoder após o retrieval inicial — ganho de +20–40% de precisão com custo computacional baixo.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent4)">F05</div>
+        <div class="pipeline-step-body">
+          <h4>Contexto Maior que o Necessário</h4>
+          <p>A crença de que "mais contexto = melhor resposta" é falsa. Contexto excessivo aumenta ruído, piora a qualidade da geração e eleva custo de tokens. <strong>Solução:</strong> Context Compression — um LLM leve resume e filtra o contexto antes de enviá-lo ao modelo principal.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent4)">F06</div>
+        <div class="pipeline-step-body">
+          <h4>Falta de Query Rewriting</h4>
+          <p>Usuários fazem perguntas vagas ("estratégia da empresa") sem especificar empresa, período ou área. O retriever recebe uma query ambígua e retorna resultados dispersos. <strong>Solução:</strong> Query Rewriting + HyDE — o LLM reformula a query para maximizar a qualidade da busca antes de acionar o retriever.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent4)">F07</div>
+        <div class="pipeline-step-body">
+          <h4>Falta de Avaliação do Retrieval</h4>
+          <p>Sistemas que não verificam se o retrieval foi bom enviam contexto ruim ao LLM — que responde mesmo assim, com confiança. <strong>Solução:</strong> Corrective RAG (CRAG) — grader automático avalia relevância dos chunks e aciona busca complementar quando necessário.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent4)">F08</div>
+        <div class="pipeline-step-body">
+          <h4>Ausência de Memória</h4>
+          <p>Assistentes corporativos que não lembram do usuário, da tarefa ou do contexto anterior transformam cada pergunta em um problema isolado — degradando a experiência e a utilidade do sistema. <strong>Solução:</strong> Memory Layer com conversation, user profile e task memory persistentes.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent4)">F09</div>
+        <div class="pipeline-step-body">
+          <h4>Falta de Verificação de Alucinação</h4>
+          <p>Mesmo com RAG, o LLM pode inventar — especialmente quando o contexto é incompleto ou a pergunta exige inferência além do que foi recuperado. <strong>Solução:</strong> Camada de verificação pós-geração com citation checking e confidence scoring antes de entregar a resposta ao usuário.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-step-num" style="color:var(--accent4)">F10</div>
+        <div class="pipeline-step-body">
+          <h4>Arquitetura Não Escalável</h4>
+          <p>Projetos que começam com LLM + Vector DB + backend simples explodem em latência e custo quando o volume cresce. <strong>Solução:</strong> Arquitetura distribuída desde o MVP — Kubernetes para orquestração, Redis para cache, Kafka para filas assíncronas, Semantic Cache para queries recorrentes.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">✅ Checklist de Produção</div>
+      <p>Use esta seção como checklist de auditoria antes de lançar um sistema RAG. Se qualquer uma das 10 falhas não tiver uma resposta clara na sua arquitetura, ela é um risco técnico ativo — não um problema futuro.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEÇÃO 16 ═══════════ -->
+  <section class="section" id="s16">
+    <div class="section-header">
+      <div class="section-num">23</div>
+      <div class="section-header-text">
+        <h2>Conclusão Estratégica</h2>
+        <div class="subtitle">O que RAG representa na nova geração de IA</div>
+      </div>
+    </div>
+
+    <p>Ao longo deste material, percorremos todas as camadas do ecossistema RAG — dos fundamentos matemáticos às arquiteturas mais avançadas em produção. A síntese não é técnica: é estratégica.</p>
+
+    <div class="diagram" style="text-align:center; padding:36px 24px;">
+      <p style="font-family:'Outfit',sans-serif; font-size:22px; font-weight:700; color:var(--text); line-height:1.4; margin-bottom:8px;">RAG é a infraestrutura cognitiva<br>da nova geração de sistemas de IA.</p>
+      <p style="font-family:'DM Mono',monospace; font-size:12px; color:var(--accent); letter-spacing:2px; text-transform:uppercase;">A diferença entre um modelo e um sistema inteligente</p>
+    </div>
+
+    <h3>O que RAG habilita</h3>
+    <p>Com RAG, um LLM deixa de ser um artefato estático de treinamento e passa a operar como um sistema vivo, conectado ao mundo real:</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon">🌐</span>
+        <h5>Acesso a conhecimento externo</h5>
+        <p>Documentos privados, bases corporativas, dados em tempo real — tudo acessível dinamicamente no momento da inferência, sem retreinar o modelo.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🎯</span>
+        <h5>Raciocínio com contexto real</h5>
+        <p>Em vez de gerar respostas a partir de padrões memorizados, o modelo raciocina sobre evidências concretas e verificáveis — reduzindo alucinação e aumentando confiabilidade.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🏢</span>
+        <h5>Operação em ambientes corporativos</h5>
+        <p>Compliance, auditabilidade, controle de acesso e rastreabilidade de fontes tornam-se possíveis. RAG é o que torna LLMs viáveis em setores regulados.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔄</span>
+        <h5>Atualização contínua sem retreino</h5>
+        <p>A base de conhecimento evolui independentemente do modelo. Novos documentos, políticas ou dados são indexados e imediatamente disponíveis — sem custo de fine-tuning.</p>
+      </div>
+    </div>
+
+    <h3>A linha que separa duas eras</h3>
+
+    <div class="diagram">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+        <div style="padding:24px; background:rgba(240,94,106,.05); border:1px solid rgba(240,94,106,.2); border-radius:12px;">
+          <div style="font-family:'DM Mono',monospace; font-size:11px; color:var(--accent4); letter-spacing:2px; text-transform:uppercase; margin-bottom:12px;">Sem RAG</div>
+          <p style="font-size:14px; color:#9da3b4; margin:0; line-height:1.7;">LLMs são modelos conversacionais sofisticados — impressionantes, mas fechados em si mesmos. Respondem com o que sabem, inventam o que não sabem, e não têm acesso ao que acontece fora do treino.</p>
+        </div>
+        <div style="padding:24px; background:rgba(74,240,176,.05); border:1px solid rgba(74,240,176,.2); border-radius:12px;">
+          <div style="font-family:'DM Mono',monospace; font-size:11px; color:var(--accent); letter-spacing:2px; text-transform:uppercase; margin-bottom:12px;">Com RAG</div>
+          <p style="font-size:14px; color:#9da3b4; margin:0; line-height:1.7;">LLMs tornam-se motores de inteligência aplicada — conectados, verificáveis e auditáveis. Operam sobre o conhecimento real da organização, do mercado e do momento presente.</p>
+        </div>
+      </div>
+    </div>
+
+    <blockquote>
+      Dominar RAG não é apenas uma habilidade técnica. É compreender como a inteligência artificial passa de ferramenta de geração de texto para infraestrutura de tomada de decisão.
+      <cite>— Síntese desta base de conhecimento</cite>
+    </blockquote>
+
+  </section>
+
 </main>
 
 <script>
+  // Toggle accordion nav group
+  function toggleNavGroup(id) {
+    const group = document.getElementById(id);
+    group.classList.toggle('open');
+  }
+
+  // Auto-open group if active section is inside it
+  function autoOpenGroups() {
+    document.querySelectorAll('.nav-group').forEach(group => {
+      const hasActive = group.querySelector('a.active');
+      if (hasActive) group.classList.add('open');
+    });
+  }
+
   // Highlight active nav link on scroll
   const sections = document.querySelectorAll('section[id], div[id]');
   const navLinks = document.querySelectorAll('nav a');
@@ -2056,6 +3501,7 @@ hyde_vectorstore = <span class="cls">Chroma</span>(embedding_function=hyde_embed
             link.classList.add('active');
           }
         });
+        autoOpenGroups();
       }
     });
   }, { rootMargin: '-30% 0px -60% 0px' });
